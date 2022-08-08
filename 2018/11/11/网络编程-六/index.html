@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢? socketserver 源码分析进入 socketserver 中查看注释:  翻译如下: 通用套接字服务类 该模块试图捕获定义服务器的各个方面 基于套接字的服务器 基于请求的服务器 在进一步查看请求之前进行客户地址验证,(这实际上是一个钩子,用于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程（六）">
+<meta property="og:url" content="http://yoursite.com/2018/11/11/网络编程-六/index.html">
+<meta property="og:site_name" content="MUSIBII">
+<meta property="og:description" content="前言在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢? socketserver 源码分析进入 socketserver 中查看注释:  翻译如下: 通用套接字服务类 该模块试图捕获定义服务器的各个方面 基于套接字的服务器 基于请求的服务器 在进一步查看请求之前进行客户地址验证,(这实际上是一个钩子,用于">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fx477n0fj8g30dc06onpg.gif">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fx47f81ixnj30l00coq3k.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx4aehutm8j311m0lkacr.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fx4apy6id2j310u0mi76s.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx4awbk00xj311k0ootdl.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fx4bicao65j312o0twjwm.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx4cs2psjij31340qkn2g.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fx4d9xi766j313w0o0jvs.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fx4df4pa37j30wq07ewf6.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fx4dgns7uhj315e0ietd2.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fx4ejycnb8j30ts0m80x3.jpg">
+<meta property="og:updated_time" content="2019-10-18T06:23:44.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络编程（六）">
+<meta name="twitter:description" content="前言在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢? socketserver 源码分析进入 socketserver 中查看注释:  翻译如下: 通用套接字服务类 该模块试图捕获定义服务器的各个方面 基于套接字的服务器 基于请求的服务器 在进一步查看请求之前进行客户地址验证,(这实际上是一个钩子,用于">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fx477n0fj8g30dc06onpg.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/11/网络编程-六/">
+
+
+
+
+
+  <title>网络编程（六） | MUSIBII</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MUSIBII</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个Buger</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/11/网络编程-六/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thales">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MUSIBII">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络编程（六）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-11T16:12:44+08:00">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:44+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/socketserver源码探析/" itemprop="url" rel="index">
+                    <span itemprop="name">socketserver源码探析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/11/网络编程-六/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/11/网络编程-六/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢?</p>
+<h1 id="socketserver-源码分析"><a href="#socketserver-源码分析" class="headerlink" title="socketserver 源码分析"></a>socketserver 源码分析</h1><p>进入 socketserver 中查看注释:</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fx477n0fj8g30dc06onpg.gif" alt></p>
+<p>翻译如下:</p>
+<p>通用套接字服务类</p>
+<p>该模块试图捕获定义服务器的各个方面</p>
+<p>基于套接字的服务器</p>
+<p>基于请求的服务器</p>
+<p>在进一步查看请求之前进行客户地址验证,(这实际上是一个钩子,用于任何需要在进行其他操作之前查看请求的处理)</p>
+<p>如何处理多个请求:</p>
+<p>​    同步(一次处理一个请求)</p>
+<p>​    分叉(每个请求由一个新进程处理)</p>
+<p>​    线程化(每个请求由一个新线程处理)</p>
+<p>这个模块的类喜欢编写最简单的服务器类型:一个同步的 TCP/IP 服务器.这是糟糕的设计,但是节省了一些输入.(还有一个问题是,深度类层次结构会减慢方法查找的速度)</p>
+<p>在继承关系图中有五个类,其中四个表示四种类型的同步服务器:</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fx47f81ixnj30l00coq3k.jpg" alt></p>
+<p>注意UnixDatagramServer 继承于 UDPServer, 而不是 UnixStreamServer–IP 和 Unix 服务器之间的唯一区别是地址族,这在两个 Unix 服务器类中都是重复的.</p>
+<p>可以使用FrokingMixIn 和ThreadingMixIn 混合类创建每种类型服务器的进程和线程版本.例如,创建一个线程 UDP 服务器如下所示:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadingUDPServer</span><span class="params">(ThreadingMixIn, UDPServer)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>混合类必须首先出现,因为它覆盖了 UDPServer 中定义的方法,设置各种成员变量还会改变底层服务器机制的行为.</p>
+<p>要实现服务,必须从 BaseRequestHandler 派生一个类,并重新定义它的 handle() 方法.然后,你可以通过将一个服务器类与请求处理程序类组合在一起来运行服务的不同版本.</p>
+<p>对于数据报或流式服务器,请求处理程序类必须是不同的.这可以通过使用请求处理程序子类 StreamRequestHandler 或 DatagramRequestHandler 类来隐藏.</p>
+<p>当然,你还得动动脑子.</p>
+<p>例如,如果服务在内存中包含可以由请求修改的状态,那么使用进程服务器是没有意义的(因为子进程中的修改永远不会达到父进程中保留并传递给每个子进程的初始状态).在这种情况下,你可以使用线程化服务器,但是你可能必须使用锁来避免几乎同时出现的两个请求,以对服务器状态应用冲突更改.</p>
+<p>另一方面,如果你正在构建一个 HTTP 服务器,其中所有数据都存储在外部(例如文件系统中),同步类本质上是在处理一个请求时使服务’听不见’,如果客户端读取其请求的所有数据很慢,那么这种情况可能会持续很长时间,在这里,线程或进程服务器是合适的.</p>
+<p>在某些情况下,同步的处理请求的一部分可能是合适的,但根据请求数据在进程子节点中完成处理可能是合适的.这可以通过使用同步服务器和在请求处理程序类 handle() 方法中执行显式进城来实现.</p>
+<p>处理多个同时请求的另一种方法既不支持线程也不支持进程的环境(这些环境太昂贵或不适合服务)是维持一个部分完成的请求的显式表和使用选择器决定下一个要处理的请求(或者是否处理新的请求)对对流服务尤为重要.每个客户端可能长时间连接的地方.(如果线程或子线程不能使用)</p>
+<p>未来的工作:</p>
+<p>​    Sun RPC 的标准类(使用 TCP 或 UDP)</p>
+<p>​    标准混合类实现各种身份验证</p>
+<p>总结: 上面的翻译是 socketserver 的注释翻译,能够是我们大致了解该模块的工作流程.那么当我们自定义自己的类是如何进行实例化得呢?</p>
+<h1 id="结合源码查看自定义类的步骤"><a href="#结合源码查看自定义类的步骤" class="headerlink" title="结合源码查看自定义类的步骤"></a>结合源码查看自定义类的步骤</h1><p>该模块分为两大类: server 类(解决连接问题)和 request 类(解决通信问题)</p>
+<p> server 类继承关系:</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx4aehutm8j311m0lkacr.jpg" alt></p>
+<p>request 类继承关系:</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fx4apy6id2j310u0mi76s.jpg" alt></p>
+<p>总结继承关系:</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx4awbk00xj311k0ootdl.jpg" alt></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fx4bicao65j312o0twjwm.jpg" alt></p>
+<p>以下述代码为例,分析 socketserver 源码:</p>
+<p><strong>服务端</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socketserver</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FtpServer</span><span class="params">(socketserver.BaseRequestHandler)</span>:</span></span><br><span class="line">    </span><br><span class="line">    coding = <span class="string">'utf-8'</span></span><br><span class="line">    server_dir = <span class="string">'file_upload'</span></span><br><span class="line">    max_packet_size = <span class="number">1024</span></span><br><span class="line">    BASE_DIR = os.path.dirname(os.path.abspath(__file__))</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.request)</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            data = self.request.recv(<span class="number">4</span>)</span><br><span class="line">            data_len = struct.unpack(<span class="string">'i'</span>, data)[<span class="number">0</span>]</span><br><span class="line">            head_json = self.request.recv(data_len).decode(self.coding)</span><br><span class="line">            head_dic = json.loads(head_json)</span><br><span class="line">            </span><br><span class="line">            cmd = head_dic[<span class="string">'cmd'</span>]</span><br><span class="line">            <span class="keyword">if</span> hasattr(self, cmd):</span><br><span class="line">                func = getattr(self, cmd)</span><br><span class="line">                func(head_dic)</span><br><span class="line">                </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, args)</span>:</span></span><br><span class="line">        file_path = os.path.normpath(os.paht.join(</span><br><span class="line">        			self.BASE_DIR,</span><br><span class="line">        			self.server_dir,</span><br><span class="line">        			args[<span class="string">'filename'</span>]))</span><br><span class="line">        filesize = args[<span class="string">'filesize'</span>]</span><br><span class="line">        recv_size = <span class="number">0</span></span><br><span class="line">        print(<span class="string">'----&gt;'</span>, file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">with</span> open(file_path, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">while</span> recv_size &lt; filesize:</span><br><span class="line">                recv_data = self.request.recv(self.max_packet_size)</span><br><span class="line">                f.write(recv_data)</span><br><span class="line">                recv_size += len(recv_size)</span><br><span class="line">                print(<span class="string">'recvsize: %s filessize: %s'</span> % (recv_size, filesize))</span><br><span class="line"></span><br><span class="line">ftpserver = socketserver.ThreadingTCPServer((<span class="string">''</span>, <span class="number">8080</span>), FtpServer)</span><br><span class="line">ftpserver.serve_forever()</span><br></pre></td></tr></table></figure>
+<p><strong>客户端</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTCPClient</span>:</span></span><br><span class="line">    </span><br><span class="line">    address_family = socket.AF_INET</span><br><span class="line">    socket_type = socket.SOCK_STREAM</span><br><span class="line">    allow_reuse_address = <span class="keyword">False</span></span><br><span class="line">    max_packet_size = <span class="number">8192</span></span><br><span class="line">    coding = <span class="string">'utf-8'</span></span><br><span class="line">    request_queue_size = <span class="number">5</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, server_address, connect=True)</span>:</span></span><br><span class="line">        self.server_address = server_address</span><br><span class="line">        self.socket = socket.socket(self.address_family,</span><br><span class="line">                                   self.socket_type)</span><br><span class="line">        <span class="keyword">if</span> connect:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                self.client_connect()</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                self.client_close()</span><br><span class="line">                <span class="keyword">raise</span></span><br><span class="line">            </span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">client_connect</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.socket.connect(self.server_address)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">client_close</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.socket.close()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            inp = input(<span class="string">'&gt;&gt;&gt;:'</span>).strip()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> inp:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            l = inp.split()</span><br><span class="line">            cmd = l[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">if</span> hasattr(self, cmd):</span><br><span class="line">                func = getattr(self, cmd)</span><br><span class="line">                func(l)</span><br><span class="line">                </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, args)</span>:</span></span><br><span class="line">        cmd = args[<span class="number">0</span>]</span><br><span class="line">        filename = args[<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(filename):</span><br><span class="line">            print(<span class="string">'file: %s is not exist'</span> % filenam)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            filesize = os.path.getsize(filename)</span><br><span class="line">            </span><br><span class="line">        head_dic = &#123;<span class="string">'cmd'</span>: cmd, <span class="string">'filename'</span>: os.path.basename(filename), <span class="string">'filesize'</span>: filesize&#125;</span><br><span class="line">        print(head_dic)</span><br><span class="line">        head_json = json.dumps(head_dic)</span><br><span class="line">        head_json_bytes = bytes(head_json, encoding=self.coding)</span><br><span class="line">        </span><br><span class="line">        head_struct = struct.pack(<span class="string">'i'</span>, len(head_json_bytes))</span><br><span class="line">        self.scoket.send(head_struct)</span><br><span class="line">        self.socket.send(head_json_bytes)</span><br><span class="line">        send_size = <span class="number">0</span></span><br><span class="line">        <span class="keyword">with</span> open(filename, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> line im f:</span><br><span class="line">                self.socket.send(line)</span><br><span class="line">                send_size += len(line)</span><br><span class="line">                print(send_size)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'upload successful'</span>)</span><br><span class="line">               </span><br><span class="line">client = MyTCPClient((<span class="string">''</span>, <span class="number">8080</span>))</span><br><span class="line">client.run()</span><br></pre></td></tr></table></figure>
+<p>以上述代码为例,分析 socketserver源码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ftpserver = socketserver.ThreadingTCPServer((<span class="string">''</span>, <span class="number">8080</span>))</span><br><span class="line">ftpserver.serve_forever()</span><br></pre></td></tr></table></figure>
+<p>查找属性的顺序可以从上面第三个继承图得到答案:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadingTCPServer-&gt;ThreadingMixIn-&gt;TCPServer-&gt;BaseServer</span><br></pre></td></tr></table></figure>
+<ol>
+<li>实例化得到 ftpserver, 先查找 ThreadingTCPServer 的初始化方法,发现左继承的 ThreadingMixIn 没有初始化方法,于是在 TCPServer 中找到,然后执行self.server_bind和 self.server_activate 方法;</li>
+</ol>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx4cs2psjij31340qkn2g.jpg" alt></p>
+<ol start="2">
+<li>初始化成功后执行ftpserver.serve_forever,发现在 ThreadingMixIn和 TCPServer 中都没有,于是只好去 BaseServer 中找到并执行 serve_forever,进而执行 self._handle_request_noblock(),该方法同样在 BaseServer 中</li>
+</ol>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fx4d9xi766j313w0o0jvs.jpg" alt></p>
+<ol start="3">
+<li>执行self_handle_request_noblock()进而执行 request,client_address = self.get_request(),在这里发现在 TCPServer 中有该方法,于是执行这个方法</li>
+</ol>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fx4df4pa37j30wq07ewf6.jpg" alt></p>
+<ol start="4">
+<li>执行 self.socket.accept(),发现该方法在 socket 中,然后执行 self.process_address(request, client_address)</li>
+</ol>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fx4dgns7uhj315e0ietd2.jpg" alt></p>
+<ol start="5">
+<li>在 ThreadingMixIn 中找到process_request, 开启多线程应对并发,进而执行process_request_thread,执行 self.finish_request(request, client_address)</li>
+</ol>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fx4ejycnb8j30ts0m80x3.jpg" alt></p>
+<ol start="6">
+<li>上述四部分完成了连接循环,接下来进入处理通信部分,在 BaseServer 中找到 finish_request,触发我们定义的类的实例化并初始化一个对象,因为自己定义的类中中没有该方法,则依据继承关系计算出的 MRO 列表查找属性</li>
+</ol>
+<p><strong>源码分析总结:</strong></p>
+<p>基于 TCP 的 socketserver 定义出的类:</p>
+<ol>
+<li>self.server 即套接字对象;</li>
+<li>self.request 即一个连接;</li>
+<li>self.client_address即客户端地址</li>
+</ol>
+<p>基于 UDP 的 socketserver 定义出的类:</p>
+<ol>
+<li>self.request 是一个元祖(第一个元素是客户端发来的数据,第二部分是服务端的 udp 套接字对象),如(b’musibii’, &lt;socket.socket fd=200, family=AddressFamily.AF_INET, type=SocketKind.SOCK_DGRAM, proto=0, laddr=(‘127.0.0.1’, 8080)&gt;);</li>
+<li>self.client_address 即客户端地址.</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文查看了一下 socketserver 模块的源码,大致的实例化对象的步骤和主要运行流程差不多搞清楚了,但是有些地方还是需要仔细琢磨的,比如第五步怎么一下就到开启多线程实现并发了.</p>
+<p>总的来说,查看源码还是有点用的,而且该模块的继承也对之前学习的继承知识进行了补充,特别是根据继承解析出来的( MRO)列表,这个列表是类中属性的查找顺序表,和是否直接继承没有关系.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      <div>
+      
+        
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/11/并发编程-一/" rel="next" title="并发编程（一）">
+                <i class="fa fa-chevron-left"></i> 并发编程（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/16/并发编程-二/" rel="prev" title="并发编程（二）">
+                并发编程（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="Thales">
+            
+              <p class="site-author-name" itemprop="name">Thales</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#socketserver-源码分析"><span class="nav-number">2.</span> <span class="nav-text">socketserver 源码分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结合源码查看自定义类的步骤"><span class="nav-number">3.</span> <span class="nav-text">结合源码查看自定义类的步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Thales</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

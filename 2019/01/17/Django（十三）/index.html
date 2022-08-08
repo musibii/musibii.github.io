@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Django 系列博客（十三）前言本篇博客介绍 Django 中的常用字段和参数。 ORM 字段AutoFieldint 自增列，必须填入参数 primary_key=True。当 model 中如果没有自增列，则会自动创建一个列名为 id 的列。 IntegerField一个整数类型，范围在-2147483648 to 2147483647。 CharField字符类型，必须提供max_leng">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django（十三）">
+<meta property="og:url" content="http://yoursite.com/2019/01/17/Django（十三）/index.html">
+<meta property="og:site_name" content="MUSIBII">
+<meta property="og:description" content="Django 系列博客（十三）前言本篇博客介绍 Django 中的常用字段和参数。 ORM 字段AutoFieldint 自增列，必须填入参数 primary_key=True。当 model 中如果没有自增列，则会自动创建一个列名为 id 的列。 IntegerField一个整数类型，范围在-2147483648 to 2147483647。 CharField字符类型，必须提供max_leng">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-18T06:23:45.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django（十三）">
+<meta name="twitter:description" content="Django 系列博客（十三）前言本篇博客介绍 Django 中的常用字段和参数。 ORM 字段AutoFieldint 自增列，必须填入参数 primary_key=True。当 model 中如果没有自增列，则会自动创建一个列名为 id 的列。 IntegerField一个整数类型，范围在-2147483648 to 2147483647。 CharField字符类型，必须提供max_leng">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/17/Django（十三）/">
+
+
+
+
+
+  <title>Django（十三） | MUSIBII</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MUSIBII</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个Buger</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/17/Django（十三）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thales">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MUSIBII">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Django（十三）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-17T18:54:43+08:00">
+                2019-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:45+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Django/" itemprop="url" rel="index">
+                    <span itemprop="name">Django</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/17/Django（十三）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/17/Django（十三）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Django-系列博客（十三）"><a href="#Django-系列博客（十三）" class="headerlink" title="Django 系列博客（十三）"></a>Django 系列博客（十三）</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇博客介绍 Django 中的常用字段和参数。</p>
+<h2 id="ORM-字段"><a href="#ORM-字段" class="headerlink" title="ORM 字段"></a>ORM 字段</h2><h3 id="AutoField"><a href="#AutoField" class="headerlink" title="AutoField"></a>AutoField</h3><p>int 自增列，必须填入参数 primary_key=True。当 model 中如果没有自增列，则会自动创建一个列名为 id 的列。</p>
+<h3 id="IntegerField"><a href="#IntegerField" class="headerlink" title="IntegerField"></a>IntegerField</h3><p>一个整数类型，范围在-2147483648 to 2147483647。</p>
+<h3 id="CharField"><a href="#CharField" class="headerlink" title="CharField"></a>CharField</h3><p>字符类型，必须提供max_length参数， max_length表示字符长度。</p>
+<h3 id="DateField"><a href="#DateField" class="headerlink" title="DateField"></a>DateField</h3><p>日期字段，日期格式  YYYY-MM-DD，相当于Python中的datetime.date()实例。</p>
+<h3 id="DateTimeField"><a href="#DateTimeField" class="headerlink" title="DateTimeField"></a>DateTimeField</h3><p>日期时间字段，格式 YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]，相当于Python中的datetime.datetime()实例。</p>
+<h2 id="常用和非常用字段"><a href="#常用和非常用字段" class="headerlink" title="常用和非常用字段"></a>常用和非常用字段</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line">AutoField(Field)</span><br><span class="line">- int自增列，必须填入参数</span><br><span class="line">primary_key = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">BigAutoField(AutoField)</span><br><span class="line">- bigint自增列，必须填入参数</span><br><span class="line">primary_key = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">注：当model中如果没有自增列，则自动会创建一个列名为id的列</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    <span class="comment"># 自动创建一个列名为id的且为自增的整数列</span></span><br><span class="line">    username = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Group</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    <span class="comment"># 自定义自增列</span></span><br><span class="line">    nid = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SmallIntegerField(IntegerField):</span><br><span class="line">- 小整数 - <span class="number">32768</span> ～ <span class="number">32767</span></span><br><span class="line"></span><br><span class="line">PositiveSmallIntegerField(PositiveIntegerRelDbTypeMixin, IntegerField)</span><br><span class="line">- 正小整数</span><br><span class="line"><span class="number">0</span> ～ <span class="number">32767</span></span><br><span class="line">IntegerField(Field)</span><br><span class="line">- 整数列(有符号的) - <span class="number">2147483648</span> ～ <span class="number">2147483647</span></span><br><span class="line"></span><br><span class="line">PositiveIntegerField(PositiveIntegerRelDbTypeMixin, IntegerField)</span><br><span class="line">- 正整数</span><br><span class="line"><span class="number">0</span> ～ <span class="number">2147483647</span></span><br><span class="line"></span><br><span class="line">BigIntegerField(IntegerField):</span><br><span class="line">- 长整型(有符号的) - <span class="number">9223372036854775808</span> ～ <span class="number">9223372036854775807</span></span><br><span class="line"></span><br><span class="line">BooleanField(Field)</span><br><span class="line">- 布尔值类型</span><br><span class="line"></span><br><span class="line">NullBooleanField(Field):</span><br><span class="line">- 可以为空的布尔值</span><br><span class="line"></span><br><span class="line">CharField(Field)</span><br><span class="line">- 字符类型</span><br><span class="line">- 必须提供max_length参数， max_length表示字符长度</span><br><span class="line"></span><br><span class="line">TextField(Field)</span><br><span class="line">- 文本类型</span><br><span class="line"></span><br><span class="line">EmailField(CharField)：</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供验证机制</span><br><span class="line"></span><br><span class="line">IPAddressField(Field)</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供验证</span><br><span class="line">IPV4</span><br><span class="line">机制</span><br><span class="line"></span><br><span class="line">GenericIPAddressField(Field)</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供验证</span><br><span class="line">Ipv4和Ipv6</span><br><span class="line">- 参数：</span><br><span class="line">protocol，用于指定Ipv4或Ipv6， <span class="string">'both'</span>, <span class="string">"ipv4"</span>, <span class="string">"ipv6"</span></span><br><span class="line">unpack_ipv4， 如果指定为<span class="keyword">True</span>，则输入::ffff: <span class="number">192.0</span></span><br><span class="line"><span class="number">.2</span></span><br><span class="line"><span class="number">.1</span></span><br><span class="line">时候，可解析为<span class="number">192</span></span><br><span class="line"><span class="number">.0</span></span><br><span class="line"><span class="number">.2</span></span><br><span class="line"><span class="number">.1</span>，开启此功能，需要protocol = <span class="string">"both"</span></span><br><span class="line"></span><br><span class="line">URLField(CharField)</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供验证</span><br><span class="line">URL</span><br><span class="line"></span><br><span class="line">SlugField(CharField)</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供验证支持</span><br><span class="line">字母、数字、下划线、连接符（减号）</span><br><span class="line"></span><br><span class="line">CommaSeparatedIntegerField(CharField)</span><br><span class="line">- 字符串类型，格式必须为逗号分割的数字</span><br><span class="line"></span><br><span class="line">UUIDField(Field)</span><br><span class="line">- 字符串类型，Django</span><br><span class="line">Admin以及ModelForm中提供对UUID格式的验证</span><br><span class="line"></span><br><span class="line">FilePathField(Field)</span><br><span class="line">- 字符串，Django</span><br><span class="line">Admin以及ModelForm中提供读取文件夹下文件的功能</span><br><span class="line">- 参数：</span><br><span class="line">path, 文件夹路径</span><br><span class="line">match = <span class="keyword">None</span>, 正则匹配</span><br><span class="line">recursive = <span class="keyword">False</span>, 递归下面的文件夹</span><br><span class="line">allow_files = <span class="keyword">True</span>, 允许文件</span><br><span class="line">allow_folders = <span class="keyword">False</span>, 允许文件夹</span><br><span class="line"></span><br><span class="line">FileField(Field)</span><br><span class="line">- 字符串，路径保存在数据库，文件上传到指定目录</span><br><span class="line">- 参数：</span><br><span class="line">upload_to = <span class="string">""</span></span><br><span class="line">上传文件的保存路径</span><br><span class="line">storage = <span class="keyword">None</span></span><br><span class="line">存储组件，默认django.core.files.storage.FileSystemStorage</span><br><span class="line"></span><br><span class="line">ImageField(FileField)</span><br><span class="line">- 字符串，路径保存在数据库，文件上传到指定目录</span><br><span class="line">- 参数：</span><br><span class="line">upload_to = <span class="string">""</span></span><br><span class="line">上传文件的保存路径</span><br><span class="line">storage = <span class="keyword">None</span></span><br><span class="line">存储组件，默认django.core.files.storage.FileSystemStorage</span><br><span class="line">width_field = <span class="keyword">None</span>, 上传图片的高度保存的数据库字段名（字符串）</span><br><span class="line">height_field = <span class="keyword">None</span></span><br><span class="line">上传图片的宽度保存的数据库字段名（字符串）</span><br><span class="line"></span><br><span class="line">DateTimeField(DateField)</span><br><span class="line">- 日期 + 时间格式</span><br><span class="line">YYYY - MM - DD</span><br><span class="line">HH: MM[:ss[.uuuuuu]][TZ]</span><br><span class="line"></span><br><span class="line">DateField(DateTimeCheckMixin, Field)</span><br><span class="line">- 日期格式</span><br><span class="line">YYYY - MM - DD</span><br><span class="line"></span><br><span class="line">TimeField(DateTimeCheckMixin, Field)</span><br><span class="line">- 时间格式</span><br><span class="line">HH: MM[:ss[.uuuuuu]]</span><br><span class="line"></span><br><span class="line">DurationField(Field)</span><br><span class="line">- 长整数，时间间隔，数据库中按照bigint存储，ORM中获取的值为datetime.timedelta类型</span><br><span class="line"></span><br><span class="line">FloatField(Field)</span><br><span class="line">- 浮点型</span><br><span class="line"></span><br><span class="line">DecimalField(Field)</span><br><span class="line">- <span class="number">10</span></span><br><span class="line">进制小数</span><br><span class="line">- 参数：</span><br><span class="line">max_digits，小数总长度</span><br><span class="line">decimal_places，小数位长度</span><br><span class="line"></span><br><span class="line">BinaryField(Field)</span><br><span class="line">- 二进制类型</span><br></pre></td></tr></table></figure>
+<h2 id="ORM字段与数据库实际字段的对应关系"><a href="#ORM字段与数据库实际字段的对应关系" class="headerlink" title="ORM字段与数据库实际字段的对应关系"></a>ORM字段与数据库实际字段的对应关系</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">对应关系：</span><br><span class="line">    <span class="string">'AutoField'</span>: <span class="string">'integer AUTO_INCREMENT'</span>,</span><br><span class="line">    <span class="string">'BigAutoField'</span>: <span class="string">'bigint AUTO_INCREMENT'</span>,</span><br><span class="line">    <span class="string">'BinaryField'</span>: <span class="string">'longblob'</span>,</span><br><span class="line">    <span class="string">'BooleanField'</span>: <span class="string">'bool'</span>,</span><br><span class="line">    <span class="string">'CharField'</span>: <span class="string">'varchar(%(max_length)s)'</span>,</span><br><span class="line">    <span class="string">'CommaSeparatedIntegerField'</span>: <span class="string">'varchar(%(max_length)s)'</span>,</span><br><span class="line">    <span class="string">'DateField'</span>: <span class="string">'date'</span>,</span><br><span class="line">    <span class="string">'DateTimeField'</span>: <span class="string">'datetime'</span>,</span><br><span class="line">    <span class="string">'DecimalField'</span>: <span class="string">'numeric(%(max_digits)s, %(decimal_places)s)'</span>,</span><br><span class="line">    <span class="string">'DurationField'</span>: <span class="string">'bigint'</span>,</span><br><span class="line">    <span class="string">'FileField'</span>: <span class="string">'varchar(%(max_length)s)'</span>,</span><br><span class="line">    <span class="string">'FilePathField'</span>: <span class="string">'varchar(%(max_length)s)'</span>,</span><br><span class="line">    <span class="string">'FloatField'</span>: <span class="string">'double precision'</span>,</span><br><span class="line">    <span class="string">'IntegerField'</span>: <span class="string">'integer'</span>,</span><br><span class="line">    <span class="string">'BigIntegerField'</span>: <span class="string">'bigint'</span>,</span><br><span class="line">    <span class="string">'IPAddressField'</span>: <span class="string">'char(15)'</span>,</span><br><span class="line">    <span class="string">'GenericIPAddressField'</span>: <span class="string">'char(39)'</span>,</span><br><span class="line">    <span class="string">'NullBooleanField'</span>: <span class="string">'bool'</span>,</span><br><span class="line">    <span class="string">'OneToOneField'</span>: <span class="string">'integer'</span>,</span><br><span class="line">    <span class="string">'PositiveIntegerField'</span>: <span class="string">'integer UNSIGNED'</span>,</span><br><span class="line">    <span class="string">'PositiveSmallIntegerField'</span>: <span class="string">'smallint UNSIGNED'</span>,</span><br><span class="line">    <span class="string">'SlugField'</span>: <span class="string">'varchar(%(max_length)s)'</span>,</span><br><span class="line">    <span class="string">'SmallIntegerField'</span>: <span class="string">'smallint'</span>,</span><br><span class="line">    <span class="string">'TextField'</span>: <span class="string">'longtext'</span>,</span><br><span class="line">    <span class="string">'TimeField'</span>: <span class="string">'time'</span>,</span><br><span class="line">    <span class="string">'UUIDField'</span>: <span class="string">'char(32)'</span>,</span><br></pre></td></tr></table></figure>
+<h2 id="ORM字段参数"><a href="#ORM字段参数" class="headerlink" title="ORM字段参数"></a>ORM字段参数</h2><h3 id="null"><a href="#null" class="headerlink" title="null"></a>null</h3><p>用于表示某个字段可以为空。</p>
+<h3 id="unique"><a href="#unique" class="headerlink" title="unique"></a>unique</h3><p>如果设置 unique=True，则该字段在此表中必须是惟一的。</p>
+<h3 id="db-index"><a href="#db-index" class="headerlink" title="db_index"></a>db_index</h3><p>如果 db_index=True， 则代表着为此字段设置索引。</p>
+<h3 id="default"><a href="#default" class="headerlink" title="default"></a>default</h3><p>为该字段设置默认值。</p>
+<h3 id="auto-now-add"><a href="#auto-now-add" class="headerlink" title="auto_now_add"></a>auto_now_add</h3><p>配置 auto_now_add=True，创建数据记录的时候会把当前时间添加到数据库。</p>
+<h3 id="auto-now"><a href="#auto-now" class="headerlink" title="auto_now"></a>auto_now</h3><p>配置 auto_now=True，每次更新数据记录的时候会更新该字段。</p>
+<h3 id="具体意思"><a href="#具体意思" class="headerlink" title="具体意思"></a>具体意思</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">null                数据库中字段是否可以为空</span><br><span class="line">db_column           数据库中字段的列名</span><br><span class="line">db_tablespace</span><br><span class="line">default             数据库中字段的默认值</span><br><span class="line">primary_key         数据库中字段是否为主键</span><br><span class="line">db_index            数据库中字段是否可以建立索引</span><br><span class="line">unique              数据库中字段是否可以建立唯一索引</span><br><span class="line">unique_for_date     数据库中字段【日期】部分是否可以建立唯一索引</span><br><span class="line">unique_for_month    数据库中字段【月】部分是否可以建立唯一索引</span><br><span class="line">unique_for_year     数据库中字段【年】部分是否可以建立唯一索引</span><br><span class="line"></span><br><span class="line">verbose_name        Admin中显示的字段名称</span><br><span class="line">blank               Admin中是否允许用户输入为空</span><br><span class="line">editable            Admin中是否可以编辑</span><br><span class="line">help_text           Admin中该字段的提示信息</span><br><span class="line">choices             Admin中显示选择框的内容，用不变动的数据放在内存中从而避免跨表操作</span><br><span class="line">                    如：gf = models.IntegerField(choices=[(<span class="number">0</span>, <span class="string">'何穗'</span>),(<span class="number">1</span>, <span class="string">'大表姐'</span>),],default=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">error_messages      自定义错误信息（字典类型），从而定制想要显示的错误信息；</span><br><span class="line">                    字典健：null, blank, invalid, invalid_choice, unique, <span class="keyword">and</span> unique_for_date</span><br><span class="line">                    如：&#123;<span class="string">'null'</span>: <span class="string">"不能为空."</span>, <span class="string">'invalid'</span>: <span class="string">'格式错误'</span>&#125;</span><br><span class="line"></span><br><span class="line">validators          自定义错误验证（列表类型），从而定制想要的验证规则</span><br><span class="line">                    <span class="keyword">from</span> django.core.validators <span class="keyword">import</span> RegexValidator</span><br><span class="line">                    <span class="keyword">from</span> django.core.validators <span class="keyword">import</span> EmailValidator,URLValidator,DecimalValidator,\</span><br><span class="line">                    MaxLengthValidator,MinLengthValidator,MaxValueValidator,MinValueValidator</span><br><span class="line">                    如：</span><br><span class="line">                        test = models.CharField(</span><br><span class="line">                            max_length=<span class="number">32</span>,</span><br><span class="line">                            error_messages=&#123;</span><br><span class="line">                                <span class="string">'c1'</span>: <span class="string">'优先错信息1'</span>,</span><br><span class="line">                                <span class="string">'c2'</span>: <span class="string">'优先错信息2'</span>,</span><br><span class="line">                                <span class="string">'c3'</span>: <span class="string">'优先错信息3'</span>,</span><br><span class="line">                            &#125;,</span><br><span class="line">                            validators=[</span><br><span class="line">                                RegexValidator(regex=<span class="string">'root_\d+'</span>, message=<span class="string">'错误了'</span>, code=<span class="string">'c1'</span>),</span><br><span class="line">                                RegexValidator(regex=<span class="string">'root_112233\d+'</span>, message=<span class="string">'又错误了'</span>, code=<span class="string">'c2'</span>),</span><br><span class="line">                                EmailValidator(message=<span class="string">'又错误了'</span>, code=<span class="string">'c3'</span>), ]                )</span><br></pre></td></tr></table></figure>
+<h2 id="关系字段"><a href="#关系字段" class="headerlink" title="关系字段"></a>关系字段</h2><h3 id="ForeignKey"><a href="#ForeignKey" class="headerlink" title="ForeignKey"></a>ForeignKey</h3><p>外键类型在ORM中用来表示外键关联关系，一般把ForeignKey字段设置在 ‘一对多’中’多’的一方。ForeignKey可以和其他表做关联关系同时也可以和自身做关联关系。</p>
+<p>####to</p>
+<p>设置要关联的表</p>
+<p>####to_field</p>
+<p>设置要关联的表的字段</p>
+<p>####related_name</p>
+<p>反向查询时，使用的字段名，用于代替原反向查询时的’表名_set’。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">publish = ForeignKey(Blog, related_name=<span class="string">'booklist'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="db-constraint"><a href="#db-constraint" class="headerlink" title="db_constraint"></a>db_constraint</h4><p>是否在数据库中创建外键约束，默认为 True。</p>
+<h3 id="OneToOneField"><a href="#OneToOneField" class="headerlink" title="OneToOneField"></a>OneToOneField</h3><p>一对一字段，通常使用一对一字段用来扩展已有字段。</p>
+<p>一对一的关联关系多用在当一张表的不同字段查询频次差距过大的情况下，将本可以存储在一张表的字段拆开放置在两张表中，然后将两张表建立一对一的关联关系。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    age = models.IntegerField(default=<span class="number">18</span>)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthorDetail</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    addr = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    author = models.OneToOneField(to=Author, to_field=<span class="string">'id'</span>)</span><br></pre></td></tr></table></figure>
+<p>####to</p>
+<p>设置要关联的表</p>
+<p>####to_field</p>
+<p>设置要关联的字段。</p>
+<p>####on_delete</p>
+<p>级联删除选项</p>
+<h3 id="ManyToManyField"><a href="#ManyToManyField" class="headerlink" title="ManyToManyField"></a>ManyToManyField</h3><p>用于表示多对多的关联关系。在数据库中通过第三张表来建立关联关系。</p>
+<h4 id="to"><a href="#to" class="headerlink" title="to"></a>to</h4><p>设置要关联的表</p>
+<h4 id="related-name"><a href="#related-name" class="headerlink" title="related_name"></a>related_name</h4><p>反向查询时，使用的字段名，用于代替原反向查询时的’表名_set’。</p>
+<h4 id="symmetrical"><a href="#symmetrical" class="headerlink" title="symmetrical"></a>symmetrical</h4><p>仅用于多对多自关联时，指定内部是否创建反向操作的字段。默认为 True。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">16</span>)</span><br><span class="line">    friends = models.ManyToManyField(<span class="string">"self"</span>)</span><br></pre></td></tr></table></figure>
+<p>此时，person 对象没有 person_set属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">16</span>)</span><br><span class="line">    friends = models.ManyToManyField(<span class="string">"self"</span>, symmetrical=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<p>此时，person 对象可以使用 person_set 属性进行反向查询。</p>
+<h4 id="through"><a href="#through" class="headerlink" title="through"></a>through</h4><p>在使用 ManyToManyField 字段时，Django 将自动生成一张表来管理多对多的关联关系。但是当我们手动创建第三张表来管理多对多关系时，就需要通过 through 来指定第三张表的表名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    price = models.DecimalField(max_digits=<span class="number">5</span>, decimal_places=<span class="number">2</span>)</span><br><span class="line">    publish_date = models.DateField()</span><br><span class="line">    publish = models.ForeignKey(to=<span class="string">'Publish'</span>, to_field=<span class="string">'id'</span>)</span><br><span class="line">    authors = models.ManyToManyField(to=<span class="string">'Author'</span>, through=<span class="string">'Book2Author'</span>, through_fields=(<span class="string">'book'</span>, <span class="string">'author'</span>))</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    gender = models.SmallIntegerField()</span><br><span class="line">    author_detail = models.OneToOneField(to=<span class="string">'AuthorDetail'</span>, to_field=<span class="string">'id'</span>, on_delete=models.CASCADE)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book2Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    book = models.ForeignKey(to=Book)</span><br><span class="line">    author = models.ForeignKey(to=Author)</span><br></pre></td></tr></table></figure>
+<h4 id="through-field"><a href="#through-field" class="headerlink" title="through_field"></a>through_field</h4><p>设置要关联的字段：关联字段在Book2Author中，从这个表到Book 表，所以把 book 写在前面。</p>
+<h4 id="db-table"><a href="#db-table" class="headerlink" title="db_table"></a>db_table</h4><p>默认创建第三张表时，设置表的名字。</p>
+<h2 id="多对多关联关系的三种方式"><a href="#多对多关联关系的三种方式" class="headerlink" title="多对多关联关系的三种方式"></a>多对多关联关系的三种方式</h2><h3 id="方式一：手动创建第三张表"><a href="#方式一：手动创建第三张表" class="headerlink" title="方式一：手动创建第三张表"></a>方式一：手动创建第三张表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    price = models.DecimalField(max_digits=<span class="number">5</span>, decimal_places=<span class="number">2</span>)</span><br><span class="line">    publish_date = models.DateField()</span><br><span class="line">    publish = models.ForeignKey(to=<span class="string">'Publish'</span>, to_field=<span class="string">'id'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    gender = models.SmallIntegerField()</span><br><span class="line">    author_detail = models.OneToOneField(to=<span class="string">'AuthorDetail'</span>, to_field=<span class="string">'id'</span>, on_delete=models.CASCADE)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book2Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    book = models.ForeignKey(to=Book)</span><br><span class="line">    author = models.ForeignKey(to=Author)</span><br></pre></td></tr></table></figure>
+<h3 id="方式二：通过-ManyToManyField-自动创建第三张表"><a href="#方式二：通过-ManyToManyField-自动创建第三张表" class="headerlink" title="方式二：通过 ManyToManyField 自动创建第三张表"></a>方式二：通过 ManyToManyField 自动创建第三张表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    price = models.DecimalField(max_digits=<span class="number">5</span>, decimal_places=<span class="number">2</span>)</span><br><span class="line">    publish_date = models.DateField()</span><br><span class="line">    publish = models.ForeignKey(to=<span class="string">'Publish'</span>, to_field=<span class="string">'id'</span>)</span><br><span class="line">    authors = models.ManyToManyField(to=<span class="string">'Author'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    gender = models.SmallIntegerField()</span><br><span class="line">    author_detail = models.OneToOneField(to=<span class="string">'AuthorDetail'</span>, to_field=<span class="string">'id'</span>, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
+<h3 id="方式三：设置-ManyToManyField-并指定手动创建第三张表"><a href="#方式三：设置-ManyToManyField-并指定手动创建第三张表" class="headerlink" title="方式三：设置 ManyToManyField 并指定手动创建第三张表"></a>方式三：设置 ManyToManyField 并指定手动创建第三张表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    price = models.DecimalField(max_digits=<span class="number">5</span>, decimal_places=<span class="number">2</span>)</span><br><span class="line">    publish_date = models.DateField()</span><br><span class="line">    publish = models.ForeignKey(to=<span class="string">'Publish'</span>, to_field=<span class="string">'id'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>)</span><br><span class="line">    gender = models.SmallIntegerField()</span><br><span class="line">    author_detail = models.OneToOneField(to=<span class="string">'AuthorDetail'</span>, to_field=<span class="string">'id'</span>, on_delete=models.CASCADE)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book2Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    book = models.ForeignKey(to=Book)</span><br><span class="line">    author = models.ForeignKey(to=Author)</span><br></pre></td></tr></table></figure>
+<p>当业务需要在第三张关系表中存储额外的字段时，就要使用第三种方式。</p>
+<p>这样创建的第三张表无法使用 set、add、remove、clear方法来管理对多多关系，需要通过第三张表来进行增、删、改，查询一样。</p>
+<h2 id="自定义字段"><a href="#自定义字段" class="headerlink" title="自定义字段"></a>自定义字段</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FixedCharField</span><span class="params">(models.Field)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    自定义的char类型的字段类</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, max_length, *args, **kwargs)</span>:</span></span><br><span class="line">        self.max_length = max_length</span><br><span class="line">        super(FixedCharField, self).__init__(max_length=max_length, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">db_type</span><span class="params">(self, connection)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        限定生成数据库表的字段类型为char，长度为max_length指定的值</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'char(%s)'</span> % self.max_length</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Class</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    id = models.AutoField(primary_key=<span class="keyword">True</span>)</span><br><span class="line">    title = models.CharField(max_length=<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># 使用自定义的char类型的字段</span></span><br><span class="line">    cname = FixedCharField(max_length=<span class="number">25</span>)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      <div>
+      
+        
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/16/Django（十二）/" rel="next" title="Django（十二）">
+                <i class="fa fa-chevron-left"></i> Django（十二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/17/Django（十四）/" rel="prev" title="Django（十四）">
+                Django（十四） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="Thales">
+            
+              <p class="site-author-name" itemprop="name">Thales</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django-系列博客（十三）"><span class="nav-number">1.</span> <span class="nav-text">Django 系列博客（十三）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ORM-字段"><span class="nav-number">1.2.</span> <span class="nav-text">ORM 字段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AutoField"><span class="nav-number">1.2.1.</span> <span class="nav-text">AutoField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IntegerField"><span class="nav-number">1.2.2.</span> <span class="nav-text">IntegerField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CharField"><span class="nav-number">1.2.3.</span> <span class="nav-text">CharField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DateField"><span class="nav-number">1.2.4.</span> <span class="nav-text">DateField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DateTimeField"><span class="nav-number">1.2.5.</span> <span class="nav-text">DateTimeField</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用和非常用字段"><span class="nav-number">1.3.</span> <span class="nav-text">常用和非常用字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ORM字段与数据库实际字段的对应关系"><span class="nav-number">1.4.</span> <span class="nav-text">ORM字段与数据库实际字段的对应关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ORM字段参数"><span class="nav-number">1.5.</span> <span class="nav-text">ORM字段参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">1.5.1.</span> <span class="nav-text">null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unique"><span class="nav-number">1.5.2.</span> <span class="nav-text">unique</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#db-index"><span class="nav-number">1.5.3.</span> <span class="nav-text">db_index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#default"><span class="nav-number">1.5.4.</span> <span class="nav-text">default</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#auto-now-add"><span class="nav-number">1.5.5.</span> <span class="nav-text">auto_now_add</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#auto-now"><span class="nav-number">1.5.6.</span> <span class="nav-text">auto_now</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体意思"><span class="nav-number">1.5.7.</span> <span class="nav-text">具体意思</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系字段"><span class="nav-number">1.6.</span> <span class="nav-text">关系字段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ForeignKey"><span class="nav-number">1.6.1.</span> <span class="nav-text">ForeignKey</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#db-constraint"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">db_constraint</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OneToOneField"><span class="nav-number">1.6.2.</span> <span class="nav-text">OneToOneField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ManyToManyField"><span class="nav-number">1.6.3.</span> <span class="nav-text">ManyToManyField</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#to"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">to</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#related-name"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">related_name</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#symmetrical"><span class="nav-number">1.6.3.3.</span> <span class="nav-text">symmetrical</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#through"><span class="nav-number">1.6.3.4.</span> <span class="nav-text">through</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#through-field"><span class="nav-number">1.6.3.5.</span> <span class="nav-text">through_field</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#db-table"><span class="nav-number">1.6.3.6.</span> <span class="nav-text">db_table</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多对多关联关系的三种方式"><span class="nav-number">1.7.</span> <span class="nav-text">多对多关联关系的三种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方式一：手动创建第三张表"><span class="nav-number">1.7.1.</span> <span class="nav-text">方式一：手动创建第三张表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式二：通过-ManyToManyField-自动创建第三张表"><span class="nav-number">1.7.2.</span> <span class="nav-text">方式二：通过 ManyToManyField 自动创建第三张表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式三：设置-ManyToManyField-并指定手动创建第三张表"><span class="nav-number">1.7.3.</span> <span class="nav-text">方式三：设置 ManyToManyField 并指定手动创建第三张表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义字段"><span class="nav-number">1.8.</span> <span class="nav-text">自定义字段</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Thales</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

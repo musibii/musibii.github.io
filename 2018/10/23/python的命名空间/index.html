@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NameSpace,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最开始对名称空间的了解是在学习函数的时候,那时候知道了作用域的查找顺序,以及全局名称空间和局部名称空间,产生疑惑的时候为学递归的时候,那时候还没有名称空间这个概念,只知道递归有个最大深度,那时候以后递归产生的名称空间是一层套一层的,以及类里面的名称空间,所以产生了深究名称空间的想法,这才诞生了这篇博客,本篇博客借鉴了python的命名空间的内容,本人对里面的例子都试验了并发现了一个错误,在类中定义">
+<meta name="keywords" content="NameSpace">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python的名称空间">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/python的命名空间/index.html">
+<meta property="og:site_name" content="MUSIBII">
+<meta property="og:description" content="最开始对名称空间的了解是在学习函数的时候,那时候知道了作用域的查找顺序,以及全局名称空间和局部名称空间,产生疑惑的时候为学递归的时候,那时候还没有名称空间这个概念,只知道递归有个最大深度,那时候以后递归产生的名称空间是一层套一层的,以及类里面的名称空间,所以产生了深究名称空间的想法,这才诞生了这篇博客,本篇博客借鉴了python的命名空间的内容,本人对里面的例子都试验了并发现了一个错误,在类中定义">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-18T06:23:43.399Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python的名称空间">
+<meta name="twitter:description" content="最开始对名称空间的了解是在学习函数的时候,那时候知道了作用域的查找顺序,以及全局名称空间和局部名称空间,产生疑惑的时候为学递归的时候,那时候还没有名称空间这个概念,只知道递归有个最大深度,那时候以后递归产生的名称空间是一层套一层的,以及类里面的名称空间,所以产生了深究名称空间的想法,这才诞生了这篇博客,本篇博客借鉴了python的命名空间的内容,本人对里面的例子都试验了并发现了一个错误,在类中定义">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/23/python的命名空间/">
+
+
+
+
+
+  <title>python的名称空间 | MUSIBII</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MUSIBII</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个Buger</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/23/python的命名空间/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thales">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MUSIBII">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python的名称空间</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-23T17:19:16+08:00">
+                2018-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:43+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/23/python的命名空间/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/23/python的命名空间/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4.5kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最开始对名称空间的了解是在学习函数的时候,那时候知道了作用域的查找顺序,以及全局名称空间和局部名称空间,产生疑惑的时候为学递归的时候,那时候还没有名称空间这个概念,只知道递归有个最大深度,那时候以后递归产生的名称空间是一层套一层的,以及类里面的名称空间,所以产生了深究名称空间的想法,这才诞生了这篇博客,本篇博客借鉴了<a href="https://segmentfault.com/a/1190000004519811" target="_blank" rel="noopener">python的命名空间</a>的内容,本人对里面的例子都试验了并发现了一个错误,在类中定义的列表生成式产生的命名空间也可以访问到类属性.</p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a.py</span></span><br><span class="line">lis = [<span class="string">'musibii'</span>, <span class="string">'thales'</span>]</span><br><span class="line">print(<span class="string">'lis1'</span>, id(name))</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">global</span> lis</span><br><span class="line">        lis.append(<span class="string">'maffia'</span>)</span><br><span class="line">        print(<span class="string">'lis'</span>, id(lis))</span><br><span class="line">        <span class="keyword">return</span> lis</span><br><span class="line">    </span><br><span class="line">print(<span class="string">'lis2'</span>, lis)</span><br><span class="line"></span><br><span class="line"><span class="comment"># b.py</span></span><br><span class="line"><span class="keyword">from</span> a <span class="keyword">import</span> A</span><br><span class="line">print(<span class="string">'b'</span>, A)</span><br></pre></td></tr></table></figure>
+<p>执行 b 文件的结果为:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lis1 <span class="number">4421146632</span></span><br><span class="line">lis2 [<span class="string">'musibii'</span>, <span class="string">'thales'</span>]</span><br><span class="line">b &lt;<span class="class"><span class="keyword">class</span> '<span class="title">a</span>.<span class="title">A</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以发现,虽然 b 只是导入了 a 中的 class A, 但导入这个过程执行了整个 a 文件,那么是否能够在 b 中访问 a 中的全局变量 lis 呢?</p>
+<p>使用 from a import A 的形式只是把 A 产生的名称空间复制了一份到 b 产生的名称空间中.</p>
+<h1 id="Python的一些基本概念"><a href="#Python的一些基本概念" class="headerlink" title="Python的一些基本概念"></a>Python的一些基本概念</h1><h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><p>在Python 中一切皆对象,那么对象到底代表什么呢?我的理解是在执行 py 文件时产生的一切变量都称为对象,如果把内存比作一座超大的房子的话,那么对象就是这座房子里的租客,那么这个租客随身携带的东西就是这个对象的一切了,对象都具有唯一的 id( 内存地址),类型( python3中统一了类和类型的概念),以及对象的值,对象一旦建立, id 便不会改变, id 就是对象在内存中的地址.</p>
+<p>用常见的对象来类比一下这三个概念:</p>
+<ol>
+<li>常量</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NAME = <span class="string">'musibii'</span></span><br><span class="line">print(id(NAME))</span><br><span class="line">print(type(NAME))</span><br><span class="line">print(globals()) <span class="comment"># 查看全局名称空间</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">4374978776</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></span><br><span class="line">&#123;'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': &lt;_frozen_importlib_external.SourceFileLoader object at 0x104c45fd0&gt;, '__spec__': None, '__annotations__': &#123;&#125;, '__builtins__': &lt;module 'builtins' (built-in)&gt;, '__file__': '/Users/jingxing/PycharmProjects/python全栈/作业/day27/duixiang.py', '__cached__': None, 'NAME': 'musibii'&#125;</span><br></pre></td></tr></table></figure>
+<p>出来的结果分别是 id,类型以及字典里面最后一个键值对对应的就是 NAME 的值.</p>
+<ol start="2">
+<li>函数</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    name = <span class="string">'musibii'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        age = <span class="number">18</span></span><br><span class="line">        print(<span class="string">'age'</span>, age)</span><br><span class="line">    inner()</span><br><span class="line">    print(locals()) <span class="comment"># 想要查看函数里面的值,必须在函数内部查看,因为函数执行完成会释放内存资源</span></span><br><span class="line"></span><br><span class="line">print(id(func))</span><br><span class="line">print(type(func))</span><br><span class="line">func()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">4529634840</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">function</span>'&gt;</span></span><br><span class="line"><span class="class"><span class="title">age</span> 18</span></span><br><span class="line">&#123;'inner': &lt;function func.&lt;locals&gt;.inner at 0x10e1cac80&gt;, 'name': 'musibii'&#125;</span><br></pre></td></tr></table></figure>
+<p>id 和类型不必多说,函数对应的属性值里面不包括嵌套函数里面的属性(说明:名称空间是相互独立的)</p>
+<ol start="3">
+<li>类</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cls</span>:</span></span><br><span class="line">    school = <span class="string">'hashangda'</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tell_info</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'%s : %s'</span> % (self.name, self.age))</span><br><span class="line"></span><br><span class="line">print(id(Cls))</span><br><span class="line">print(type(Cls))</span><br><span class="line">print(Cla.__dict__)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">140390381504248</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">type</span>'&gt;</span></span><br><span class="line">&#123;'__module__': '__main__', 'school': 'hashangda', '__init__': &lt;function Cls.__init__ at 0x10648eae8&gt;, 'tell_info': &lt;function Cls.tell_info at 0x10648ebf8&gt;, '__dict__': &lt;attribute '__dict__' of 'Cls' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Cls' objects&gt;, '__doc__': None&#125;</span><br></pre></td></tr></table></figure>
+<p>类的 id 为内存地址,类型为type类型,在 type 里面 type 就是类型的意思,所以说 python 里所有的类的类型都是类型,而类里面的属性就是类的值了.</p>
+<p>python 里面所有的对象都具有的并且根确定身份有关的值为 id, 类型和值了.名称不是对象的属性,名称只是指向对象,因为可以多个名称指向同一个对象.</p>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><p>在对象里把变量名叫为名称其实是不准确的,这些名称都有一个共同的名字: identifier(和 id 是两个意思),中文名为’标识符’.</p>
+<p>标识符:在 Python中,各类对象的名称,比如函数名,方法名,类名,变量名.常量名都称为标识符.</p>
+<p><strong>在 Python 中赋值并不会直接复制数据,而只是将名称绑定到对象</strong>,对象本身不需要知道和关心自己的标识符叫什么,一个对象甚至可以指向不同的标识符.真正管理这些标识符的事物是’名称空间’.</p>
+<h3 id="名称空间"><a href="#名称空间" class="headerlink" title="名称空间"></a>名称空间</h3><p><strong>名称空间</strong>(NameSpace):名字(标识符)到对象的映射.</p>
+<p>简单来说,名称空间可以理解为<strong>记录对象和对象名字对应关系的空间</strong>,在对象那里查看的对象的值就是名称空间,这是一个字典,一个命名空间就是名字到对象的映射,标识符是键,对象则是值.</p>
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>与名称空间相对的一个概念就是’作用域’,作用域本质是一块文本区域, Python 通过该文本区域可以<strong>直接访问</strong>相应的名称空间.</p>
+<p>Python 中不加 <strong>.</strong> 的访问为直接访问,反之为属性访问.</p>
+<p>因此可以简单的将作用域理解为<strong>直接访问名称空间的一种实现</strong>,具体而言:</p>
+<ol>
+<li>作用域内相应的名称空间可以被直接访问;</li>
+<li>只有作用域内的名称空间才可以被直接访问(因此并不是所有的名称空间都可以被直接访问).</li>
+</ol>
+<h1 id="LEGB"><a href="#LEGB" class="headerlink" title="LEGB"></a>LEGB</h1><h3 id="LEGB-名称空间"><a href="#LEGB-名称空间" class="headerlink" title="LEGB 名称空间"></a>LEGB 名称空间</h3><p>这四类名称空间可以简记为 LEGB:</p>
+<ol>
+<li>局部名称空间( local): 指的是一个函数或者一个类所定义的名称空间:包括函数的参数,局部变量,类的属性等;</li>
+<li>闭包名称空间(enclosing function):闭包函数的名称空间( python3引入);</li>
+<li>全局名称空间( global):读入一个模块(也即一个. py 文件)后产生的名称空间;</li>
+<li>内建名称空间(builtin):Python 解释器启动时自动载入__builtin__ 模块后形成的名称空间;像 str/list/dict… 等内置对象的名称就处于这里.</li>
+</ol>
+<p>举例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test.py</span></span><br><span class="line">v1 = <span class="string">'global var'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(v1)</span>:</span></span><br><span class="line">    v2 = <span class="string">'local var'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        v3 = v2 + v</span><br><span class="line">        <span class="keyword">return</span> v3</span><br><span class="line">    <span class="keyword">return</span> inner</span><br></pre></td></tr></table></figure>
+<p>内建的反正每次都一样,在这里的三个名称空间里面的名称为:</p>
+<ol>
+<li>‘v1’ 为全局变量 v1 的名字,其所处的名称空间为全局名称空间;需要注意的是全局名称空间包括 ‘func’ 但不包括 func 的参数和内部变量;</li>
+<li>func 包括 ‘v’, ‘v2’, 和 ‘inner’名称的局部名称空间;</li>
+<li>执行 func 后, func 的作用域释放,并返回绑定了 v 和 v2变量的闭包函数 inner, 此时闭包函数的名称空间即为闭包名称空间,因此局部名称空间和闭包名称空间是相对而言的,对于父函数 func 而言,两者具有产生时间上的差异.</li>
+</ol>
+<h3 id="LEGB-访问规则"><a href="#LEGB-访问规则" class="headerlink" title="LEGB 访问规则"></a>LEGB 访问规则</h3><p>通过上面的例子,发现 LEGB 四类名称空间本身具有明显的内外层级概念,而这种层级概念正是构建作用域的前提:作用域依据这种层级概念将不同类型的名称空间组织起来并划归到不同层级的作用域,然后定义好不同层级作用域之间的访问规则,从而实现名称空间的直接访问.</p>
+<p>LEGB 的访问规则:**同样的标识符在各层名称空间可以被重复使用而不会发生冲突,但 Python 寻找一个标识符的过程总是从当前层开始逐层网上找,直到首次找到这个标识符为止.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line">v1 = <span class="number">1</span></span><br><span class="line">v2 = <span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    v1 = <span class="number">2</span></span><br><span class="line">    print(v1)</span><br><span class="line">    print(v2)</span><br><span class="line">    </span><br><span class="line">func()</span><br><span class="line">print(v1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>全局变量和函数 func 都定义了变量 v1,在函数内部会优先选择自己局部名称空间内的变量 v1,对于 func 中未定义的变量 v2,Python 会向上查找全局名称空间,读取全局变量后打印输出.</p>
+<h3 id="global-和-nonlocal-语句"><a href="#global-和-nonlocal-语句" class="headerlink" title="global 和 nonlocal 语句"></a>global 和 nonlocal 语句</h3><h4 id="global-和-nonlocal-的作用"><a href="#global-和-nonlocal-的作用" class="headerlink" title="global 和 nonlocal 的作用"></a>global 和 nonlocal 的作用</h4><p>对于上层名称空间里的变量, python 允许直接读取,但是不可以在内层作用域直接改写上层变量,在这方面很明显的区别就是在闭包函数里.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># e.py</span></span><br><span class="line">gv = [<span class="string">'a'</span>, <span class="string">'global'</span>, <span class="string">'var'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(v)</span>:</span></span><br><span class="line">    gv = [<span class="string">'gv'</span>] + gv</span><br><span class="line">    lv = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        lv = lv + [v]</span><br><span class="line">        gv.insert(<span class="number">1</span>, lv[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">return</span> inner</span><br></pre></td></tr></table></figure>
+<p>实际调用 func 函数后,上面两处对 gv 和 lv 进行赋值的操作都会发生<strong>UnboundLocalError</strong>:因为 python 在执行函数前,会首先生成各层名称空间和作用域,因此 python 会在执行赋值前将 func 内的 gv 和 lv 写入局部名称空间和闭包名称空间,当 python 执行赋值语句的时候,会发现在局部作用域,闭包作用域内发现局部名称空间和闭包名称空间内已经具有 <strong>gv</strong> 和 <strong>lv</strong> 标识符,但是这两个非全局标识符在赋值语句执行之前并没有被赋值,也即没有对象与标识符关联,因此无法参与赋值运算,从而触发<strong>在引用之前未赋值</strong>的错误;但这段程序的本意是为了让全局变量 gv 和局部变量 lv 参与运算,为了避免类似的情况发生,Python 引入了<strong>global</strong>和<strong>nonlocal</strong>语句来说明局部名称空间和闭包名称空间使用的标识符分别来自全局名称空间和局部名称空间,声明之后就可以在 func 和 inner 名称空间里直接改写上层名称空间内的<strong>gv</strong>和<strong>lv</strong>的值了.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># f.py</span></span><br><span class="line">gv = [<span class="string">'a'</span>, <span class="string">'global'</span>, <span class="string">'var'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(v)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> gv</span><br><span class="line">    gv = [<span class="string">'gv'</span>] + gv</span><br><span class="line">    lv = []</span><br><span class="line">    print(id(lv))</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> lv</span><br><span class="line">        lv = lv + [v]</span><br><span class="line">        print(id(lv))</span><br><span class="line">        gv.insert(<span class="number">1</span>, lv[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">return</span> inner</span><br></pre></td></tr></table></figure>
+<p>这样就可以正常修改了.原博客说 lv 的 id 都是一样的,在 mac 上版本为3..6.6测试发现不是一样的.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">4416600136</span></span><br><span class="line"><span class="number">4416615624</span></span><br><span class="line"><span class="comment"># 确实是使用了上层名称空间的变量,但是重新赋值后, gv 和上层的 gv 已经不是同一个了, lv 也一样,所以内存地址都发生变化了.</span></span><br></pre></td></tr></table></figure>
+<h3 id="借壳"><a href="#借壳" class="headerlink" title="借壳"></a>借壳</h3><p>那么不用 global 和nonlocal 可以达到上面的目的吗?</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># g.py</span></span><br><span class="line">gv = [<span class="string">'a'</span>, <span class="string">'global'</span>, <span class="string">'var'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(v)</span>:</span></span><br><span class="line">	gv.insert(<span class="number">0</span>, <span class="string">'gv'</span>)</span><br><span class="line">	lv = []</span><br><span class="line">	print(id(lv))</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        lv.append(v)</span><br><span class="line">        print(id(lv))</span><br><span class="line">        gv.insert(<span class="number">1</span>, lv[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span> gv</span><br><span class="line">    <span class="keyword">return</span> inner</span><br></pre></td></tr></table></figure>
+<p>看作者的这个解释为借壳,感觉很形象,这个原因应该用列表式可变类型来解释比较好, insert 和 append 的操作并没有对列表进行赋值操作,而是对列表这个容器里面的东西修改了并不是修改列表,我们都知道电脑内的内存永远都不会改变,他就是个超大的容器,用来装东西的,假如现在有个列表,它的容量和内存一样大,那么是不是好理解点,我们在和内存一样的列表里操作会改变这个列表吗?不会.</p>
+<p><strong>在 global 和 nonlocal 的作用就是把上层有的标识符和对象复制一份到下层名称空间</strong></p>
+<p>为什么在<strong>下层作用域</strong>可以使用<strong>读取</strong>上层作用域的值而不可以<strong>使用</strong>它的值呢?</p>
+<p>这是因为 python 的两个概念不同的原因,作用域和名称空间的区别导致的.标识符的查找顺序是从当前层一层层向外查找的,这是根据作用域来查找的,那么名称空间呢?作用域和名称空间的在执行 py 文件就已经产生了,其实可以理解这是一个东西,其实里面保存的信息(除了某些可能有特殊含义的值不一样外)都一样,不一样的是作用于里面只保存了标识符,而名称空间里不仅保存了标识符还保存了标识符对应的对象.查找值的顺序是根据作用域来的,使用值就只能使用自己名称空间里的值,名称空间里保存的是标识符和标识符对应的对象,只有本层名称空间里有这个标识符和标识符对应的对象才可以使用(读,使用).</p>
+<p>那么现在很明白为什么不能直接在下层名称空间直接使用上层名称空间里的名称了.</p>
+<h3 id="global-和-nonlocal-语句对标识符创建的不同影响"><a href="#global-和-nonlocal-语句对标识符创建的不同影响" class="headerlink" title="global 和 nonlocal 语句对标识符创建的不同影响"></a>global 和 nonlocal 语句对标识符创建的不同影响</h3><p>需要注意的是: <strong>global</strong> 语句只是声明该标识符引用的变量来自于全局变量,但并不能直接在当前层创建该标识符;<strong>nonlocal</strong> 语句则会在子函数名称空间创建与父函数变量同名的标识符.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># j.py</span></span><br><span class="line">gv = [<span class="string">'a global var'</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span></span><br><span class="line">    lv = <span class="string">'a local var'</span></span><br><span class="line">    print(locals())</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> lv</span><br><span class="line">        <span class="keyword">global</span> gv</span><br><span class="line">        print(locals())</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line">&#123;<span class="string">'lv'</span>: <span class="string">'a local var'</span>&#125;</span><br><span class="line">&#123;<span class="string">'lv'</span>: <span class="string">'a local var'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>运行 func 函数后 global 语句并未将 ‘ gv ‘变量引入局部名称空间,执行闭包函数后,’ local’语句将父函数变量’lv’引入闭包名称空间.</p>
+<p>之所以 nonlocal 和 global 语句的处置不同,在于全局变量的作用域生存期很长,在模块内随时都可以访问,而父类函数的局部作用域在父函数执行完毕后便会直接释放,因此 nonlocal 语句必须将父函数变量的标识符写入闭包名称空间.</p>
+<h1 id="名称空间的生命周期"><a href="#名称空间的生命周期" class="headerlink" title="名称空间的生命周期"></a>名称空间的生命周期</h1><h3 id="创建规则"><a href="#创建规则" class="headerlink" title="创建规则"></a>创建规则</h3><p>还有一个重要的问题没有解决:’标识符不是一开始就存在名称空间的,名称空间也不是平白无故产生的,那么名称空间是在什么时候被创建?又是什么时候被删除的呢?’</p>
+<p>名称空间产生顺序:</p>
+<ol>
+<li>内建名称空间在 Python 解释器启动时创建,之后会一直存在;</li>
+<li>模块的全局名称空间在模块定义时被读入创建,通常模块名称空间也会保持到解释器退出;</li>
+<li>函数调用时产生新的局部名称空间,函数返回结果,抛出异常时释放名称空间,每一次递归都产生一个名称空间;</li>
+<li>标识符产生地点决定标识符所处的名称空间.</li>
+</ol>
+<h3 id="类的名称空间"><a href="#类的名称空间" class="headerlink" title="类的名称空间"></a>类的名称空间</h3><p>首次,函数和类执行时都会产生局部名称空间,但类的执行机制不同于函数;</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># i.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'function'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="number">1</span>)</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="number">2</span>)</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">()</span>:</span></span><br><span class="line">            print(<span class="number">3</span>)</span><br><span class="line">            </span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>如上,类就是一个可执行的代码块,只要该类被加载,就会被执行,这一点不同于函数.</p>
+<p>类之所以这样设计的原因在于:类是创建其他实例(声称其他的类或者具体的对象)的对象,因此必须在实例之前被创建,而类又可能涉及到与其他类的继承,重载等一系列问题,故在代码加载时就被创建利于提高效率和降低逻辑复杂度.</p>
+<p>其次,与函数不同的是,类的局部名称空间并非作用于;</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b = [a + i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>)]</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line">NameError: name <span class="string">'a'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br></pre></td></tr></table></figure>
+<p> 执行上段代码,可以发现类 A 内列表推导式无法调取 a 的值,但函数可以.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    b = [a + i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>)]</span><br><span class="line">    print(b)</span><br><span class="line"></span><br><span class="line">func()  <span class="comment">#[1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+<p> 因此, A 中的 a 不同于 func 中的 a 在局部名称空间可以被任意读取,之所以说是’不可以被任意’读取而不是’不可被读取’,原因在于在类 A 的局部名称空间内, a 其实在一定程度上可以被读取的:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    c = a + <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>而上例中 b 的赋值操作不能被执行,原因在于列表推导式会创建自己的局部名称空间,因此难以访问到 a???????</p>
+<p><strong>为什么</strong>访问不到 a???</p>
+<h3 id="编译与局部名称空间"><a href="#编译与局部名称空间" class="headerlink" title="编译与局部名称空间"></a>编译与局部名称空间</h3><p>Python 是动态语言,很多行为是动态发生的,但 Python 自身也在不断进步,比如为了提高效率,有些行为会在编译时候完成,局部变量的创建就是如此.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="number">1</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        print(a)  <span class="comment"># error</span></span><br><span class="line">        a = <span class="number">2</span>     <span class="comment"># error</span></span><br><span class="line">    inner()</span><br></pre></td></tr></table></figure>
+<p>上段程序还未执行,就提示存在语法错误,原因在于 Python 解释器发现 inner 内存在自身的 a 变量,但在声明之前就被 print 了.</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>1、为什么 b.py 只是导入 a.py 中的 <code>class A</code>,却执行了整个 a.py 文件?<br>答：因为 Python 并不知道 <code>class A</code> 在 a.py 文档的何处，为了能够找到 <code>class A</code>，Python 需要执行整个文档。<br>2、为什么 b.py 的导入执行了整个 a.py 文档，却在 b 中难以调用 a 的全局变量 <code>va</code>？<br>答：Python 的全局变量指的是模块全局，因此不可以跨文档，因此 global 语句也是不可以跨文档的。另外， b 只是导入了 a 的 <code>class A</code>，因此并不会导入 a 中所有的标识符，所以 类似<code>a.va</code> 这样的调用也是不起作用的。</p>
+<p>关于命名空间：<br>1、赋值、定义类和函数都会产生新的标识符；<br>2、全局变量的标识符不能跨文档；<br>3、各级命名空间相互独立互不影响；<br>4、Python 总是从当前层逐渐向上寻找标识符；<br>5、内层作用域若想直接修改上层变量，需要通过 <code>global</code> <code>nonlocal</code> 语句先声明；<br>6、单纯的 <code>global</code> 语句并不能为所在层级创建相应标识符，但 <code>nonlocal</code> 语句可以在闭包空间中创建相应标识符；<br>7、类的局部命名空间不是作用域。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NameSpace/" rel="tag"><i class="fa fa-tag"></i> NameSpace</a>
+          
+        </div>
+      
+
+      <div>
+      
+        
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/23/类的三大特性之继承/" rel="next" title="类的三大特性之继承">
+                <i class="fa fa-chevron-left"></i> 类的三大特性之继承
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/24/类的三大特性之封装/" rel="prev" title="类的三大特性之封装">
+                类的三大特性之封装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="Thales">
+            
+              <p class="site-author-name" itemprop="name">Thales</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#例子"><span class="nav-number">1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python的一些基本概念"><span class="nav-number">2.</span> <span class="nav-text">Python的一些基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象"><span class="nav-number">2.0.1.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标识符"><span class="nav-number">2.0.2.</span> <span class="nav-text">标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#名称空间"><span class="nav-number">2.0.3.</span> <span class="nav-text">名称空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">2.0.4.</span> <span class="nav-text">作用域</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#LEGB"><span class="nav-number">3.</span> <span class="nav-text">LEGB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LEGB-名称空间"><span class="nav-number">3.0.1.</span> <span class="nav-text">LEGB 名称空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LEGB-访问规则"><span class="nav-number">3.0.2.</span> <span class="nav-text">LEGB 访问规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#global-和-nonlocal-语句"><span class="nav-number">3.0.3.</span> <span class="nav-text">global 和 nonlocal 语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#global-和-nonlocal-的作用"><span class="nav-number">3.0.3.1.</span> <span class="nav-text">global 和 nonlocal 的作用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#借壳"><span class="nav-number">3.0.4.</span> <span class="nav-text">借壳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#global-和-nonlocal-语句对标识符创建的不同影响"><span class="nav-number">3.0.5.</span> <span class="nav-text">global 和 nonlocal 语句对标识符创建的不同影响</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#名称空间的生命周期"><span class="nav-number">4.</span> <span class="nav-text">名称空间的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建规则"><span class="nav-number">4.0.1.</span> <span class="nav-text">创建规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的名称空间"><span class="nav-number">4.0.2.</span> <span class="nav-text">类的名称空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与局部名称空间"><span class="nav-number">4.0.3.</span> <span class="nav-text">编译与局部名称空间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Thales</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

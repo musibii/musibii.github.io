@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="启动 py 文件 导入 request 或 session   1from flask import request 执行 flask 文件，生成 request对象，这是个全局的request对象，请求来的数据，元数据都在这个request里面。   生成 request 对象其实是LocalProxy类的实例   12request = LocalProxy(partial(_lookup_r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flask 源码阅读">
+<meta property="og:url" content="http://yoursite.com/2019/05/07/flask-源码阅读/index.html">
+<meta property="og:site_name" content="MUSIBII">
+<meta property="og:description" content="启动 py 文件 导入 request 或 session   1from flask import request 执行 flask 文件，生成 request对象，这是个全局的request对象，请求来的数据，元数据都在这个request里面。   生成 request 对象其实是LocalProxy类的实例   12request = LocalProxy(partial(_lookup_r">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-18T06:23:43.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flask 源码阅读">
+<meta name="twitter:description" content="启动 py 文件 导入 request 或 session   1from flask import request 执行 flask 文件，生成 request对象，这是个全局的request对象，请求来的数据，元数据都在这个request里面。   生成 request 对象其实是LocalProxy类的实例   12request = LocalProxy(partial(_lookup_r">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/07/flask-源码阅读/">
+
+
+
+
+
+  <title>flask 源码阅读 | MUSIBII</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MUSIBII</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个Buger</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/07/flask-源码阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thales">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MUSIBII">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flask 源码阅读</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T16:38:59+08:00">
+                2019-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:43+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flask/" itemprop="url" rel="index">
+                    <span itemprop="name">flask</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/07/flask-源码阅读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/07/flask-源码阅读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="启动-py-文件"><a href="#启动-py-文件" class="headerlink" title="启动 py 文件"></a>启动 py 文件</h1><ol>
+<li>导入 request 或 session </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br></pre></td></tr></table></figure>
+<p>执行 flask 文件，生成 <code>request</code>对象，这是个全局的<code>request</code>对象，请求来的数据，元数据都在这个<code>request</code>里面。 </p>
+<ol start="2">
+<li>生成 request 对象其实是<code>LocalProxy</code>类的实例 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">request = LocalProxy(partial(_lookup_req_object, <span class="string">'request'</span>))</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>执行 init方法 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, local, name=None)</span>:</span> </span><br><span class="line"></span><br><span class="line">object.__setattr__(self, <span class="string">'_LocalProxy__local'</span>, local) </span><br><span class="line"></span><br><span class="line">object.__setattr__(self, <span class="string">'__name__'</span>, name) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> callable(local) <span class="keyword">and</span> <span class="keyword">not</span> hasattr(local, <span class="string">'__release_local__'</span>): </span><br><span class="line"></span><br><span class="line"><span class="comment"># "local" is a callable that is not an instance of Local or </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># LocalManager: mark it as a wrapped function. </span></span><br><span class="line"></span><br><span class="line">object.__setattr__(self, <span class="string">'__wrapped__'</span>, local)</span><br></pre></td></tr></table></figure>
+<p>其中<code>partial(_lookup_req_obj, &#39;request)</code>当做参数传给<code>init</code>里面的<code>local</code>变量。 </p>
+<p><strong>partial 函数</strong>：偏函数，当我们要执行一个函数时，会遇到参数不齐，选择偏函数先将部分参数传进去，经过偏函数会生成一个<code>functools.partial</code>对象，是要执行函数的内存地址，不过参数已经传进去了。 </p>
+<ol start="4">
+<li>执行<code>__setattr__</code>设值。 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">object.__setattr__(self, <span class="string">'_LocalProxy__local'</span>, local)</span><br></pre></td></tr></table></figure>
+<p>为什么不直接使用<code>self._Local__local = local</code>这种设置属性的方法呢？ </p>
+<p>第一点是因为，如果使用<code>self</code>设置值的话会调用类的<code>setattr</code>方法，而<code>setattr</code>方法被重写，用来获取当前<code>__local()</code>对象中的属性值了，这样会产生冲突，而这里只需要简单的给<code>self</code>设置一个值，所以采用父类的<code>setattr</code>来设置值，那么为什么不是<code>object.__setattr__(self, &#39;__local&#39;, local)</code>这种方式呢？因为<code>__local</code>是类私有属性，想要使用的话需要按照这个方式来。 </p>
+<p>经过这一步，将<code>local</code>，也就是传进来的偏函数内存地址赋值给<code>__local</code>属性了。 </p>
+<h1 id="执行-app-run-做的事"><a href="#执行-app-run-做的事" class="headerlink" title="执行 app.run()做的事"></a>执行 app.run()做的事</h1><p>源代码如下： </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, host=None, port=None, debug=None, load_dotenv=True, **options)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.environ.get(<span class="string">'FLASK_RUN_FROM_CLI'</span>) == <span class="string">'true'</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .debughelpers <span class="keyword">import</span> explain_ignored_app_run </span><br><span class="line"></span><br><span class="line">explain_ignored_app_run() </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> get_load_dotenv(load_dotenv): </span><br><span class="line"></span><br><span class="line">cli.load_dotenv() </span><br><span class="line"></span><br><span class="line"><span class="comment"># if set, let env vars override previous values </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">'FLASK_ENV'</span> <span class="keyword">in</span> os.environ: </span><br><span class="line"></span><br><span class="line">self.env = get_env() </span><br><span class="line"></span><br><span class="line">self.debug = get_debug_flag() </span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> <span class="string">'FLASK_DEBUG'</span> <span class="keyword">in</span> os.environ: </span><br><span class="line"></span><br><span class="line">self.debug = get_debug_flag() </span><br><span class="line"></span><br><span class="line"><span class="comment"># debug passed to method overrides all other sources </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> debug <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">self.debug = bool(debug) </span><br><span class="line"></span><br><span class="line">_host = <span class="string">'127.0.0.1'</span> </span><br><span class="line"></span><br><span class="line">_port = <span class="number">5000</span> </span><br><span class="line"></span><br><span class="line">server_name = self.config.get(<span class="string">'SERVER_NAME'</span>) </span><br><span class="line"></span><br><span class="line">sn_host, sn_port = <span class="keyword">None</span>, <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> server_name: </span><br><span class="line"></span><br><span class="line">sn_host, _, sn_port = server_name.partition(<span class="string">':'</span>) </span><br><span class="line"></span><br><span class="line">host = host <span class="keyword">or</span> sn_host <span class="keyword">or</span> _host </span><br><span class="line"></span><br><span class="line">port = int(port <span class="keyword">or</span> sn_port <span class="keyword">or</span> _port) </span><br><span class="line"></span><br><span class="line">options.setdefault(<span class="string">'use_reloader'</span>, self.debug) </span><br><span class="line"></span><br><span class="line">options.setdefault(<span class="string">'use_debugger'</span>, self.debug) </span><br><span class="line"></span><br><span class="line">options.setdefault(<span class="string">'threaded'</span>, <span class="keyword">True</span>) </span><br><span class="line"></span><br><span class="line">cli.show_server_banner(self.env, self.debug, self.name, <span class="keyword">False</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> werkzeug.serving <span class="keyword">import</span> run_simple </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">run_simple(host, port, self, **options) </span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line"></span><br><span class="line"><span class="comment"># reset the first request information if the development server </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># reset normally. This makes it possible to restart the server </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># without reloader and that stuff from an interactive shell. </span></span><br><span class="line"></span><br><span class="line">self._got_first_request = <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>启动 web 服务 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">run_simple(host, port, self, **options</span><br></pre></td></tr></table></figure>
+<p>其中<code>self</code>是<code>Flask</code>类的一个实例。 </p>
+<p>执行函数内的<code>inner</code>函数，执行<code>make_server</code>函数 </p>
+<ol start="2">
+<li>执行 make_server 函数 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_server</span><span class="params">(host=None, port=None, app=None, threaded=False, processes=<span class="number">1</span>, </span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">request_handler=None, passthrough_errors=False, </span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">ssl_context=None, fd=None)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Create a new server instance that is either threaded, or forks </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">or just processes one request after another. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> threaded <span class="keyword">and</span> processes &gt; <span class="number">1</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">raise</span> ValueError(<span class="string">"cannot have a multithreaded and "</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"multi process server."</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> threaded: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> ThreadedWSGIServer(host, port, app, request_handler, </span><br><span class="line"></span><br><span class="line">passthrough_errors, ssl_context, fd=fd) </span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> processes &gt; <span class="number">1</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> ForkingWSGIServer(host, port, app, processes, request_handler, </span><br><span class="line"></span><br><span class="line">passthrough_errors, ssl_context, fd=fd) </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> BaseWSGIServer(host, port, app, request_handler, </span><br><span class="line"></span><br><span class="line">passthrough_errors, ssl_context, fd=fd)</span><br></pre></td></tr></table></figure>
+<h1 id="启动套接字"><a href="#启动套接字" class="headerlink" title="启动套接字"></a>启动套接字</h1><ol>
+<li>执行 BaseWSGIServer </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host, port, app, handler=None, </span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">passthrough_errors=False, ssl_context=None, fd=None)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> handler <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">handler = WSGIRequestHandler </span><br><span class="line"></span><br><span class="line">self.address_family = select_ip_version(host, port) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> fd <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">real_sock = socket.fromfd(fd, self.address_family, </span><br><span class="line"></span><br><span class="line">socket.SOCK_STREAM) </span><br><span class="line"></span><br><span class="line">port = <span class="number">0</span> </span><br><span class="line"></span><br><span class="line">HTTPServer.__init__(self, get_sockaddr(host, int(port), </span><br><span class="line"></span><br><span class="line">self.address_family), handler) </span><br><span class="line"></span><br><span class="line">self.app = app </span><br><span class="line"></span><br><span class="line">self.passthrough_errors = passthrough_errors </span><br><span class="line"></span><br><span class="line">self.shutdown_signal = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line">self.host = host </span><br><span class="line"></span><br><span class="line">self.port = self.socket.getsockname()[<span class="number">1</span>] </span><br><span class="line"></span><br><span class="line"><span class="comment"># Patch in the original socket. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> fd <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">self.socket.close() </span><br><span class="line"></span><br><span class="line">self.socket = real_sock </span><br><span class="line"></span><br><span class="line">self.server_address = self.socket.getsockname() </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ssl_context <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> isinstance(ssl_context, tuple): </span><br><span class="line"></span><br><span class="line">ssl_context = load_ssl_context(*ssl_context) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ssl_context == <span class="string">'adhoc'</span>: </span><br><span class="line"></span><br><span class="line">ssl_context = generate_adhoc_ssl_context() </span><br><span class="line"></span><br><span class="line"><span class="comment"># If we are on Python 2 the return value from socket.fromfd </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># is an internal socket object but what we need for ssl wrap </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># is the wrapper around it :( </span></span><br><span class="line"></span><br><span class="line">sock = self.socket </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> PY2 <span class="keyword">and</span> <span class="keyword">not</span> isinstance(sock, socket.socket): </span><br><span class="line"></span><br><span class="line">sock = socket.socket(sock.family, sock.type, sock.proto, sock) </span><br><span class="line"></span><br><span class="line">self.socket = ssl_context.wrap_socket(sock, server_side=<span class="keyword">True</span>) </span><br><span class="line"></span><br><span class="line">self.ssl_context = ssl_context </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line">self.ssl_context = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<p>在执行 init 方法时，会执行<code>HTTPServer.__init__</code>，因为HTTPServer 没有初始化方法，所以执行父类<code>TcpServer</code>的<code>init</code>，源码如下： </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, server_address, RequestHandlerClass, bind_and_activate=True)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Constructor. May be extended, do not override."""</span> </span><br><span class="line"></span><br><span class="line">BaseServer.__init__(self, server_address, RequestHandlerClass) </span><br><span class="line"></span><br><span class="line">self.socket = socket.socket(self.address_family, </span><br><span class="line"></span><br><span class="line">self.socket_type) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> bind_and_activate: </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">self.server_bind() </span><br><span class="line"></span><br><span class="line">self.server_activate() </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>: </span><br><span class="line"></span><br><span class="line">self.server_close() </span><br><span class="line"></span><br><span class="line"><span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<p>在这里就会绑定 ip 和端口并进行监听请求。 </p>
+<ol start="2">
+<li>监听请求，执行<code>TcpServer.server_activate()</code> </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">server_activate</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Called by constructor to activate the server. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">May be overridden. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line">self.socket.listen(self.request_queue_size)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>执行 <code>self.socket.listen</code> </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">listen</span><span class="params">(self, backlog=None)</span>:</span> <span class="comment"># real signature unknown; restored from __doc__ </span></span><br><span class="line"></span><br><span class="line"><span class="string">""" </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">listen([backlog]) </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Enable a server to accept connections. If backlog is specified, it must be </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">at least 0 (if it is lower, it is set to 0); it specifies the number of </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">unaccepted connections that the system will allow before refusing new </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">connections. If not specified, a default reasonable value is chosen. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>查看 cpython 的源码关于 socket 的，发现是用 c 写的，目前看不懂，记录如下： </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">static</span> PyObject * </span><br><span class="line"></span><br><span class="line">sock_listen(PySocketSockObject *s, PyObject *args) </span><br><span class="line"></span><br><span class="line">&#123; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* We try to choose a default backlog high enough to avoid connection drops </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">* for common workloads, yet not too high to limit resource usage. */</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> backlog = Py_MIN(SOMAXCONN, <span class="number">128</span>); </span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> res; </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!PyArg_ParseTuple(args, <span class="string">"|i:listen"</span>, &amp;backlog)) </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">NULL</span>; </span><br><span class="line"></span><br><span class="line">Py_BEGIN_ALLOW_THREADS </span><br><span class="line"></span><br><span class="line"><span class="comment">/* To avoid problems on systems that don't allow a negative backlog </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">* (which doesn't make sense anyway) we force a minimum value of 0. */</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (backlog &lt; <span class="number">0</span>) </span><br><span class="line"></span><br><span class="line">backlog = <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">res = listen(s-&gt;sock_fd, backlog); </span><br><span class="line"></span><br><span class="line">Py_END_ALLOW_THREADS </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (res &lt; <span class="number">0</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> s-&gt;errorhandler(); </span><br><span class="line"></span><br><span class="line">Py_RETURN_NONE; </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="serve-forever"><a href="#serve-forever" class="headerlink" title="serve_forever"></a>serve_forever</h1><p>返回 <code>BaseServer</code>类对象给<code>srv</code>，执行该对象的<code>serve_forever</code>方法 </p>
+<ol>
+<li>执行serve_forever 方法 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">serve_forever</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line">self.shutdown_signal = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">HTTPServer.serve_forever(self) </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt: </span><br><span class="line"></span><br><span class="line"><span class="keyword">pass</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line"></span><br><span class="line">self.server_close()</span><br></pre></td></tr></table></figure>
+<p>这里，已经把 flask 实例传进去了，在 <code>srv.app</code>就是 flask 实例，在<code>serve_foerever</code>里面是 self.app </p>
+<ol start="2">
+<li>执行 HTTPServer.serve_forever </li>
+</ol>
+<p>经过 <code>mro</code>查询， </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">graph TD </span><br><span class="line"></span><br><span class="line">A[HTTPServer] --&gt;|serve_forever| B(socketserver.TCPServer) </span><br><span class="line"></span><br><span class="line">B --&gt; C(BaseServer) </span><br><span class="line"></span><br><span class="line">C --&gt;D[BaseServer.serve_forever]</span><br></pre></td></tr></table></figure>
+<p>最终执行的是<code>BaseServer.serve_forever</code>方法。 </p>
+<ol start="3">
+<li>执行 BaseServer.serve_forever </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">serve_forever</span><span class="params">(self, poll_interval=<span class="number">0.5</span>)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Handle one request at a time until shutdown. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Polls for shutdown every poll_interval seconds. Ignores </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">self.timeout. If you need to do periodic tasks, do them in </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">another thread. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line">self.__is_shut_down.clear() </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line"><span class="comment"># <span class="doctag">XXX:</span> Consider using another file descriptor or connecting to the </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># socket to wake this up instead of polling. Polling reduces our </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># responsiveness to a shutdown request and wastes cpu at all other </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># times. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> _ServerSelector() <span class="keyword">as</span> selector: </span><br><span class="line"></span><br><span class="line">selector.register(self, selectors.EVENT_READ) </span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> self.__shutdown_request: </span><br><span class="line"></span><br><span class="line">ready = selector.select(poll_interval) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ready: </span><br><span class="line"></span><br><span class="line">self._handle_request_noblock() </span><br><span class="line"></span><br><span class="line">self.service_actions() </span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line"></span><br><span class="line">self.__shutdown_request = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line">self.__is_shut_down.set()</span><br></pre></td></tr></table></figure>
+<p>在调用该方法时，<code>HTTPSErver.serve_forever(self)</code>，这里的<code>self</code>是<code>BaseWSGIServer</code>对象，这个对象里面封装了<code>Flask</code>实例，也就是<code>self.app</code> </p>
+<ol start="4">
+<li>执行 self._handle_request_noblock() </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_handle_request_noblock</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Handle one request, without blocking. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">I assume that selector.select() has returned that the socket is </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">readable before this function was called, so there should be no risk of </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">blocking in get_request(). </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">request, client_address = self.get_request() </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> OSError: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> self.verify_request(request, client_address): </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">self.process_request(request, client_address) </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> Exception: </span><br><span class="line"></span><br><span class="line">self.handle_error(request, client_address) </span><br><span class="line"></span><br><span class="line">self.shutdown_request(request) </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>: </span><br><span class="line"></span><br><span class="line">self.shutdown_request(request) </span><br><span class="line"></span><br><span class="line"><span class="keyword">raise</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line">self.shutdown_request(request)</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>执行 self.get_request() </li>
+</ol>
+<p>根据 mro 查询，发现执行的是<code>BaseWSGIServer</code>的方法<code>get_reqeust</code> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_request</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line">con, info = self.socket.accept() </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> con, info</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>执行 self.socket.accept </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""accept() -&gt; (socket object, address info) </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Wait for an incoming connection. Return a new socket </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">representing the connection, and the address of the client. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">For IP sockets, the address info is a pair (hostaddr, port). </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line">fd, addr = self._accept() </span><br><span class="line"></span><br><span class="line"><span class="comment"># If our type has the SOCK_NONBLOCK flag, we shouldn't pass it onto the </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># new socket. We do not currently allow passing SOCK_NONBLOCK to </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># accept4, so the returned socket is always blocking. </span></span><br><span class="line"></span><br><span class="line">type = self.type &amp; ~globals().get(<span class="string">"SOCK_NONBLOCK"</span>, <span class="number">0</span>) </span><br><span class="line"></span><br><span class="line">sock = socket(self.family, type, self.proto, fileno=fd) </span><br><span class="line"></span><br><span class="line"><span class="comment"># Issue #7995: if no default timeout is set and the listening </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># socket had a (non-zero) timeout, force the new socket in blocking </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># mode to override platform-specific socket flags inheritance. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> getdefaulttimeout() <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">and</span> self.gettimeout(): </span><br><span class="line"></span><br><span class="line">sock.setblocking(<span class="keyword">True</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> sock, addr</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>执行 self._accept </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getattribute__</span><span class="params">(self, *args, **kwargs)</span>:</span> <span class="comment"># real signature unknown </span></span><br><span class="line"></span><br><span class="line"><span class="string">""" Return getattr(self, name). """</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h1 id="请求来时"><a href="#请求来时" class="headerlink" title="请求来时"></a>请求来时</h1><p>当一个请求来到 BaseWSGIServer服务器时，由<code>_accept</code>接收请求调用self.app，因为<code>Flask</code>里面定义了<code>__call__</code>方法，所以会执行该方法 </p>
+<ol>
+<li>执行<code>__call__</code> </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, environ, start_response)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""The WSGI server calls the Flask application object as the </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">WSGI application. This calls :meth:`wsgi_app` which can be </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">wrapped to applying middleware."""</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> self.wsgi_app(environ, start_response)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>执行 self.wsgi_app </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wsgi_app</span><span class="params">(self, environ, start_response)</span>:</span> </span><br><span class="line"></span><br><span class="line">ctx = self.request_context(environ) </span><br><span class="line"></span><br><span class="line">error = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">ctx.push() </span><br><span class="line"></span><br><span class="line">response = self.full_dispatch_request() </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e: </span><br><span class="line"></span><br><span class="line">error = e </span><br><span class="line"></span><br><span class="line">response = self.handle_exception(e) </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>: </span><br><span class="line"></span><br><span class="line">error = sys.exc_info()[<span class="number">1</span>] </span><br><span class="line"></span><br><span class="line"><span class="keyword">raise</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> response(environ, start_response) </span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> self.should_ignore_error(error): </span><br><span class="line"></span><br><span class="line">error = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line">ctx.auto_pop(error)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>执行 self.request_contest </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">request_context</span><span class="params">(self, environ)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> RequestContext(self, environ)</span><br></pre></td></tr></table></figure>
+<p>该处的 <code>self</code>是<code>Flask</code>实例 </p>
+<ol start="4">
+<li>实例化 RequestContext 对象 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, app, environ, request=None)</span>:</span> </span><br><span class="line"></span><br><span class="line">self.app = app </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> request <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">request = app.request_class(environ) </span><br><span class="line"></span><br><span class="line">self.request = request </span><br><span class="line"></span><br><span class="line">self.url_adapter = app.create_url_adapter(self.request) </span><br><span class="line"></span><br><span class="line">self.flashes = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line">self.session = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># Request contexts can be pushed multiple times and interleaved with </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># other request contexts. Now only if the last level is popped we </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># get rid of them. Additionally if an application context is missing </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># one is created implicitly so for each level we add this information </span></span><br><span class="line"></span><br><span class="line">self._implicit_app_ctx_stack = [] </span><br><span class="line"></span><br><span class="line"><span class="comment"># indicator if the context was preserved. Next time another context </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># is pushed the preserved context is popped. </span></span><br><span class="line"></span><br><span class="line">self.preserved = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># remembers the exception for pop if there is one in case the context </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># preservation kicks in. </span></span><br><span class="line"></span><br><span class="line">self._preserved_exc = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># Functions that should be executed after the request on the response </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># object. These will be called before the regular "after_request" </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># functions. </span></span><br><span class="line"></span><br><span class="line">self._after_request_functions = [] </span><br><span class="line"></span><br><span class="line">self.match_request()</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>实例化 app.request_class(environ) </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, environ, populate_request=True, shallow=False)</span>:</span> </span><br><span class="line"></span><br><span class="line">self.environ = environ </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> populate_request <span class="keyword">and</span> <span class="keyword">not</span> shallow: </span><br><span class="line"></span><br><span class="line">self.environ[<span class="string">'werkzeug.request'</span>] = self </span><br><span class="line"></span><br><span class="line">self.shallow = shallow</span><br></pre></td></tr></table></figure>
+<p>实例化父类BaseRequest的<code>init</code>方法 </p>
+<ol start="6">
+<li>执行 ctx.push </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line">top = _request_ctx_stack.top </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> top <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span> <span class="keyword">and</span> top.preserved: </span><br><span class="line"></span><br><span class="line">top.pop(top._preserved_exc) </span><br><span class="line"></span><br><span class="line"><span class="comment"># Before we push the request context we have to ensure that there </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># is an application context. </span></span><br><span class="line"></span><br><span class="line">app_ctx = _app_ctx_stack.top </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> app_ctx <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> app_ctx.app != self.app: </span><br><span class="line"></span><br><span class="line">app_ctx = self.app.app_context() </span><br><span class="line"></span><br><span class="line">app_ctx.push() </span><br><span class="line"></span><br><span class="line">self._implicit_app_ctx_stack.append(app_ctx) </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line">self._implicit_app_ctx_stack.append(<span class="keyword">None</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> hasattr(sys, <span class="string">'exc_clear'</span>): </span><br><span class="line"></span><br><span class="line">sys.exc_clear() </span><br><span class="line"></span><br><span class="line">_request_ctx_stack.push(self) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> self.session <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">session_interface = self.app.session_interface </span><br><span class="line"></span><br><span class="line">self.session = session_interface.open_session( </span><br><span class="line"></span><br><span class="line">self.app, self.request </span><br><span class="line"></span><br><span class="line">) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> self.session <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">self.session = session_interface.make_null_session(self.app)</span><br></pre></td></tr></table></figure>
+<p>执行_app_ctx_stack.top </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@property </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""The topmost item on the stack. If the stack is empty, </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`None` is returned. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> self._local.stack[<span class="number">-1</span>] </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> (AttributeError, IndexError): </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>执行 _request_ctx_stack.push(self) </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, obj)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Pushes a new item to the stack"""</span> </span><br><span class="line"></span><br><span class="line">rv = getattr(self._local, <span class="string">'stack'</span>, <span class="keyword">None</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rv <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">self._local.stack = rv = [] </span><br><span class="line"></span><br><span class="line">rv.append(obj) </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> rv</span><br></pre></td></tr></table></figure>
+<p>这一步将 RequestContext 对象放到_local 里面，对对象赋值调用对象的<code>setattr</code>方法 </p>
+<ol start="8">
+<li>执行 Local 的 setattr </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__setattr__</span><span class="params">(self, name, value)</span>:</span> </span><br><span class="line"></span><br><span class="line">ident = self.__ident_func__() </span><br><span class="line"></span><br><span class="line">storage = self.__storage__ </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">storage[ident][name] = value </span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> KeyError: </span><br><span class="line"></span><br><span class="line">storage[ident] = &#123;name: value&#125;</span><br></pre></td></tr></table></figure>
+<p><code>self.__storage__</code>是一个字典，类似于下面 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">storage = &#123; </span><br><span class="line"></span><br><span class="line">线程 id: &#123;<span class="string">'stack'</span>: []&#125;, </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="9">
+<li>执行 RequestContext的 auto_pop 方法 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">auto_pop</span><span class="params">(self, exc)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> self.request.environ.get(<span class="string">'flask._preserve_context'</span>) <span class="keyword">or</span>  </span><br><span class="line"></span><br><span class="line">(exc <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span> <span class="keyword">and</span> self.app.preserve_context_on_exception): </span><br><span class="line"></span><br><span class="line">self.preserved = <span class="keyword">True</span> </span><br><span class="line"></span><br><span class="line">self._preserved_exc = exc </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line">self.pop(exc)</span><br></pre></td></tr></table></figure>
+<ol start="10">
+<li>执行是RequestContext 的 pop 方法 </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self, exc=_sentinel)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Pops the request context and unbinds it by doing that. This will </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">also trigger the execution of functions registered by the </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:meth:`~flask.Flask.teardown_request` decorator. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">.. versionchanged:: 0.9 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Added the `exc` argument. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line">app_ctx = self._implicit_app_ctx_stack.pop() </span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>: </span><br><span class="line"></span><br><span class="line">clear_request = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> self._implicit_app_ctx_stack: </span><br><span class="line"></span><br><span class="line">self.preserved = <span class="keyword">False</span> </span><br><span class="line"></span><br><span class="line">self._preserved_exc = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> exc <span class="keyword">is</span> _sentinel: </span><br><span class="line"></span><br><span class="line">exc = sys.exc_info()[<span class="number">1</span>] </span><br><span class="line"></span><br><span class="line">self.app.do_teardown_request(exc) </span><br><span class="line"></span><br><span class="line"><span class="comment"># If this interpreter supports clearing the exception information </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># we do that now. This will only go into effect on Python 2.x, </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># on 3.x it disappears automatically at the end of the exception </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># stack. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> hasattr(sys, <span class="string">'exc_clear'</span>): </span><br><span class="line"></span><br><span class="line">sys.exc_clear() </span><br><span class="line"></span><br><span class="line">request_close = getattr(self.request, <span class="string">'close'</span>, <span class="keyword">None</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> request_close <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">request_close() </span><br><span class="line"></span><br><span class="line">clear_request = <span class="keyword">True</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">finally</span>: </span><br><span class="line"></span><br><span class="line">rv = _request_ctx_stack.pop() </span><br><span class="line"></span><br><span class="line"><span class="comment"># get rid of circular dependencies at the end of the request </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># so that we don't require the GC to be active. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> clear_request: </span><br><span class="line"></span><br><span class="line">rv.request.environ[<span class="string">'werkzeug.request'</span>] = <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># Get rid of the app as well if necessary. </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> app_ctx <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line">app_ctx.pop(exc) </span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> rv <span class="keyword">is</span> self, <span class="string">'Popped wrong request context. '</span>  </span><br><span class="line"></span><br><span class="line"><span class="string">'(%r instead of %r)'</span> % (rv, self)</span><br></pre></td></tr></table></figure>
+<ol start="11">
+<li>执行 <code>_request_ctx_stack.pop()</code> </li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span> </span><br><span class="line"></span><br><span class="line"><span class="string">"""Removes the topmost item from the stack, will return the </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">old value or `None` if the stack was already empty. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span> </span><br><span class="line"></span><br><span class="line">stack = getattr(self._local, <span class="string">'stack'</span>, <span class="keyword">None</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> stack <span class="keyword">is</span> <span class="keyword">None</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">None</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> len(stack) == <span class="number">1</span>: </span><br><span class="line"></span><br><span class="line">release_local(self._local) </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> stack[<span class="number">-1</span>] </span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> stack.pop()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2019/05/07/flask-源码阅读/">flask 源码阅读</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Thales 的个人博客">Thales</a></p>
+  <p><span>发布时间:</span>2019年05月07日 - 16:38</p>
+  <p><span>最后更新:</span>2019年10月18日 - 14:23</p>
+  <p><span>原始链接:</span><a href="/2019/05/07/flask-源码阅读/" title="flask 源码阅读">http://yoursite.com/2019/05/07/flask-源码阅读/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/05/07/flask-源码阅读/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          icon: "success",
+          showConfirmButton: true
+          });
+    });
+    });
+</script>
+
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/03/Linux命令案例/" rel="next" title="Linux命令案例">
+                <i class="fa fa-chevron-left"></i> Linux命令案例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/07/Web身份验证、会话管理和访问控制/" rel="prev" title="Web身份验证、会话管理和访问控制">
+                Web身份验证、会话管理和访问控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="Thales">
+            
+              <p class="site-author-name" itemprop="name">Thales</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-py-文件"><span class="nav-number">1.</span> <span class="nav-text">启动 py 文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行-app-run-做的事"><span class="nav-number">2.</span> <span class="nav-text">执行 app.run()做的事</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动套接字"><span class="nav-number">3.</span> <span class="nav-text">启动套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#serve-forever"><span class="nav-number">4.</span> <span class="nav-text">serve_forever</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#请求来时"><span class="nav-number">5.</span> <span class="nav-text">请求来时</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Thales</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
