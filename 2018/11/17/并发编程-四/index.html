@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言上篇博客介绍了进程的创建,进程的相关属性以及三种特殊进程:僵尸进程,孤儿进程和守护进程. 守护进程是一个在后台运行并且不受任何终端控制的进程,用于执行特定的系统任务.很多守护进程在系统引导的时候启动,并且一直运行直到系统关闭.另一些只在需要的时候才启动,完成任务后就自动结束. 本篇博客详细介绍守护进程的产生原因以及作用.(因为我觉得守护进程对操作系统的正常运行还蛮重要的) 守护进程介绍以下介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发编程（四）">
+<meta property="og:url" content="https://rsuxwvilc.github.io/2018/11/17/并发编程-四/index.html">
+<meta property="og:site_name" content="rsuxwvilc">
+<meta property="og:description" content="前言上篇博客介绍了进程的创建,进程的相关属性以及三种特殊进程:僵尸进程,孤儿进程和守护进程. 守护进程是一个在后台运行并且不受任何终端控制的进程,用于执行特定的系统任务.很多守护进程在系统引导的时候启动,并且一直运行直到系统关闭.另一些只在需要的时候才启动,完成任务后就自动结束. 本篇博客详细介绍守护进程的产生原因以及作用.(因为我觉得守护进程对操作系统的正常运行还蛮重要的) 守护进程介绍以下介绍">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxb66jw9q7j31c00u07v9.jpg">
+<meta property="og:updated_time" content="2019-10-18T06:23:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="并发编程（四）">
+<meta name="twitter:description" content="前言上篇博客介绍了进程的创建,进程的相关属性以及三种特殊进程:僵尸进程,孤儿进程和守护进程. 守护进程是一个在后台运行并且不受任何终端控制的进程,用于执行特定的系统任务.很多守护进程在系统引导的时候启动,并且一直运行直到系统关闭.另一些只在需要的时候才启动,完成任务后就自动结束. 本篇博客详细介绍守护进程的产生原因以及作用.(因为我觉得守护进程对操作系统的正常运行还蛮重要的) 守护进程介绍以下介绍">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxb66jw9q7j31c00u07v9.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://rsuxwvilc.github.io/2018/11/17/并发编程-四/">
+
+
+
+
+
+  <title>并发编程（四） | rsuxwvilc</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">rsuxwvilc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hahah</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://rsuxwvilc.github.io/2018/11/17/并发编程-四/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vilc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="rsuxwvilc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">并发编程（四）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T13:31:47+08:00">
+                2018-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:43+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/17/并发编程-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/17/并发编程-四/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.8kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上篇博客介绍了进程的创建,进程的相关属性以及三种特殊进程:僵尸进程,孤儿进程和守护进程.</p>
+<p>守护进程是一个在后台运行并且不受任何终端控制的进程,用于执行特定的系统任务.很多守护进程在系统引导的时候启动,并且一直运行直到系统关闭.另一些只在需要的时候才启动,完成任务后就自动结束.</p>
+<p>本篇博客详细介绍守护进程的产生原因以及作用.(因为我觉得守护进程对操作系统的正常运行还蛮重要的)</p>
+<h1 id="守护进程介绍"><a href="#守护进程介绍" class="headerlink" title="守护进程介绍"></a>守护进程介绍</h1><p><strong>以下介绍摘自百度百科</strong></p>
+<p>守护进程是一个在后台运行并且不受任何终端控制的进程. Unix 操作系统有很多典型的守护进程,他们在后台运行,执行不同的管理任务.</p>
+<p>用户使守护进程独立于所有终端是因为,在守护进程从一个终端启动的情况下,这同一个终端可能被其他的用户使用.例如,用户从一个终端启动守护进程后退出,然后另一个人也登陆到这个终端.用户不希望后者在使用该终端的过程中,接收到守护进程的任何错误信息.同样,由终端键入的任何信号(例如中断信号)也不应该影响先前在该终端启动的任何守护进程的运行.虽然让服务器后台运行很容易(只要shell 命令行以&amp;结尾),但用户还应该做些工作,让程序本身能够自动进入后台,且不依赖于任何终端.</p>
+<p>守护进程没有控制终端,因此当某些情况发生时,不管是一般的报告性信息,还是由管理员处理的紧急信息,都需要以某种方式输出. Syslog 函数就是输出这些信息的标准方法,它把信息发送给 syslogd 守护进程.</p>
+<h1 id="创建守护进程步骤"><a href="#创建守护进程步骤" class="headerlink" title="创建守护进程步骤"></a>创建守护进程步骤</h1><p>在不同 Unix环境下,守护进程的具体变成细节并不一致.但所幸的是,守护进程的编程原则都一样,区别仅在于具体的实现细节不同,这个原则就是要满足守护进程的特性.编程规则如下:</p>
+<h3 id="在后台运行"><a href="#在后台运行" class="headerlink" title="在后台运行"></a>在后台运行</h3><p>为避免挂起控制终端,要将守护进程放入后台运行,其方法是在父进程中调用 fork 使父进程终止,让子进程在后台执行,使得程序在 shell 终端里造成一个已经运行完毕的假象.之后所有的工作都在子进程中完成,而用户在 shell 终端里则可以执行其他命令,从而使得程序以僵尸进程运行,在形式上做到了与控制终端的隔离.具体就是 fork 产生子进程后,调用 exit 使父进程终止.</p>
+<h3 id="脱离控制终端-登陆会话和进程组"><a href="#脱离控制终端-登陆会话和进程组" class="headerlink" title="脱离控制终端,登陆会话和进程组"></a>脱离控制终端,登陆会话和进程组</h3><p>登陆回话可以包含多个进程组,这些进程组共享一个控制终端,这个控制终端通常是创建进程的登陆终端,控制终端,登陆回话和进程组通常都是从父进程继承下来的.目的就是要脱离这些继承的东西,不受它们的影响.</p>
+<p>这就要使用 setsid 函数使进程成为会话组长.</p>
+<p><strong>setsid</strong></p>
+<p>setsid 命令 子进程从父进程继承了: Session ID, 进程组 ID 合打开的终端.子进程如果要脱离这些,代码中可通过调用 setsid 来实现.而命令行或脚本中可以通过命令setsid 来实现. setsid 帮助一个进程脱离从父进程继承而来的已打开的终端,会话和进程组.</p>
+<p>需要说明的是,当进程是会话组长时, setsid 调用会失败,大第一点已经保证进程不是会话组长.setsid 调用成功后,进程会成为新的会话组长和新的进程组长,并与原来的登陆会话和进程组脱离,由于会话过程对控制终端的独占性,进程同时与控制终端脱离.</p>
+<p>具体操作就是:</p>
+<ol>
+<li>成为新会话的首进程;</li>
+<li>成为一个新进程组的首进程;</li>
+<li>没有控制终端.</li>
+</ol>
+<h3 id="禁止进程重新打开控制终端"><a href="#禁止进程重新打开控制终端" class="headerlink" title="禁止进程重新打开控制终端"></a>禁止进程重新打开控制终端</h3><p>现在进程已经成为无终端的会话组长,但它可以重新申请打开一个控制终端.可以通过是进程不再成为会话组长来禁止进程重新打开控制终端.</p>
+<h3 id="关闭打开的文件描述符"><a href="#关闭打开的文件描述符" class="headerlink" title="关闭打开的文件描述符"></a>关闭打开的文件描述符</h3><p>进程从创建它的父进程那里继承了打开的文件描述符.如果不关闭,会造成资源浪给,造成进程所在地文件系统无法卸下以及产生无法预料的错误.一般来说,必要的是关闭0,1,2三个文件描述符,即标准输入,标准输出,标准错误.因为一般希望守护进程自己有一套信息输出,输入的体系,而不是把所有的东西都发送到终端屏幕上.所以需要调用 fclose 来关闭文件描述符.</p>
+<h3 id="改变当前工作目录"><a href="#改变当前工作目录" class="headerlink" title="改变当前工作目录"></a>改变当前工作目录</h3><p>将当前工作目录更改为根目录,从父进程继承过来的当前工作目录可能在一个装配的文件系统中.因为守护进程通常在系统引导之前是一直存在的,所以如果守护进程的当前工作目录在一个装配文件系统中,那么该文件系统就不能被拆卸.</p>
+<p>另外,某些守护进程可能会把当前工作目录更改到某个指定位置,在此位置做它们的工作.例如,行式打印机守护进程常常将工作目录更改到 spool 目录上.可以调用 chdir 更改工作目录.</p>
+<h3 id="重设文件创建掩码"><a href="#重设文件创建掩码" class="headerlink" title="重设文件创建掩码"></a>重设文件创建掩码</h3><p>文件创建掩码是指屏蔽掉文件创建时的对应为.由于使用 fork 后函数新建的子进程继承了父进程的文件创建掩码,这就给该子进程使用文件带来了诸多麻烦.因此,把文件创建掩码设置为0,可以大大增强该守护进程的灵活性.设置文件创建掩码的函数是 umask, 通常的使用方法为umask(0).</p>
+<h3 id="处理-SIGCHLD-信号"><a href="#处理-SIGCHLD-信号" class="headerlink" title="处理 SIGCHLD 信号"></a>处理 SIGCHLD 信号</h3><p>处理 SIGCHLD 信号并不是必需的.但是对于某些守护进程,特别是服务器进程往往在请求到来时生产子进程出来请求.如果父进程不等待子进程结束,子进程将成为僵尸进程而占用系统资源.如果父进程等待子进程结束,将增加父进程的负担,影响服务器进程的并发性能.在系统下可以简单的将 SIGCHLD 信号的操作设为 SIG-IGN:</p>
+<p><code>signal(SIGCHLD,SIG_IGN)</code></p>
+<p>这样,内核在子进程结束后不会产生僵尸进程,这一点与 BSD4不同,杂 iBSD4下必须显式等待子进程结束后才能释放僵尸进程.</p>
+<p>#python守护进程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initDaemon</span><span class="params">(stdoutfd, stderrfd=None, basePath=None)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    初始化为 daemon 进程</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    basePath = <span class="string">'/'</span> <span class="keyword">if</span> basePath <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> basePath</span><br><span class="line">    curTimeStr = time.strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        stdoutfd.write(<span class="string">'Start on %s, '</span> % curTimeStr)</span><br><span class="line">        stdoutfd.flush()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> os.fork() &gt; <span class="number">0</span>:</span><br><span class="line">            os._exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">except</span> OSError:</span><br><span class="line">        <span class="keyword">raise</span> OSError(<span class="string">'fork error'</span>)</span><br><span class="line">        </span><br><span class="line">    os.chdir(basePath)</span><br><span class="line">    os.setsid()</span><br><span class="line">    sys.stdout = stdoutfd</span><br><span class="line">    sys.stderr = stdoutfd <span class="keyword">if</span> stderrfd <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> stderrfd</span><br><span class="line">    sys.stdin = open(<span class="string">'/dev/nu,,'</span>, <span class="string">'r'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> os.fork() &gt; <span class="number">0</span>:</span><br><span class="line">            os._exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">except</span> OSError:</span><br><span class="line">        <span class="keyword">raise</span> OSError(<span class="string">'fork 2 error'</span>)</span><br><span class="line">        </span><br><span class="line">    pid = int(os.getpid())</span><br><span class="line">    stdoutfd.write(<span class="string">'pid=%s\n'</span> % pid)</span><br><span class="line">    stdoutfd.flush()</span><br><span class="line">    <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<p>##守护进程运行方式</p>
+<h3 id="独立运行的守护进程"><a href="#独立运行的守护进程" class="headerlink" title="独立运行的守护进程"></a>独立运行的守护进程</h3><p>独立运行的守护进程有 init 脚本负责管理,所有独立运行的守护进程的脚本在/etc/rc和/etc/init.d 目录下.系统服务都是独立运行的守护进程包括 syslogd 和 cron 等.服务器监听一个特定的端口上等待客户端的连接.如果客户端产生一个连接请求,守护进程就创建一个子服务器响应这个连接,而主服务器继续监听.以保持多个子服务器池等待下一个客户端请求连接.</p>
+<h3 id="由-xinetd-管理的守护进程"><a href="#由-xinetd-管理的守护进程" class="headerlink" title="由 xinetd 管理的守护进程"></a>由 xinetd 管理的守护进程</h3><p>从守护进程的概念可以看出,系统所运行的每一种服务,都必须运行一个监听某个端口连接所发生的守护进程,这通常意味着资源浪费.为了解决这个问题, Linux 引进了’网络守护进程服务程序’的概念. CentOS6.4使用的网络守护进程是 xinted(eXtendedInterNET services daemon).</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxb66jw9q7j31c00u07v9.jpg" alt></p>
+<p>上图是 ubuntu18.04使用的网络守护进程服务程序, xinted 能够同时监听多个指定的端口,在接受用户请求时,它能够根据用户请求的端口不同,启动不同的网络服务进程来处理这些用户请求.可以把 xinted 看做一个管理启动服务的管理服务器,它决定把一个客户请求交给那个程序处理,然后启动相应的守护进程.</p>
+<p>##守护进程分类</p>
+<p>按照服务类型分为如下几个:</p>
+<ul>
+<li>系统守护进程: syslogd,login,crond,at 等</li>
+<li>网络守护进程: sendmail,httpd,xinetd 等</li>
+<li>独立启动的守护进程: httpd,named,xinetd 等</li>
+<li>被动守护进程(由 xinetd 启动):telnet,finger,ktalk 等</li>
+</ul>
+<h2 id="python守护进程使用"><a href="#python守护进程使用" class="headerlink" title="python守护进程使用"></a>python守护进程使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'子进程'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    p = Process(target=task)</span><br><span class="line">    <span class="comment"># 将该进程设为父进程的守护进程</span></span><br><span class="line">    p.daemon = <span class="literal">True</span></span><br><span class="line">    p.start()</span><br><span class="line">    print(<span class="string">'主进程'</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong></p>
+<p>设置守护进程必须在启动进程之前执行.</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于一个操作系统来说,为了执行不同的管理任务,需要守护进程来协助管理.对于守护进程最重要的来说是需要在后台运行.其次,守护进程必须与其运行前的环境隔离开来.这些环境包括未关闭的文件描述符,控制终端,会话和进程组,工作目录以及文件创建掩码等.这些环境通常是守护进程从执行它的父进程(特别是 shell)继承下来的.最后守护进程的启动方式有其特殊之处.它可以在 Linux 系统启动时从启动脚本/etc/rc. d中启动,也可以由作业控制进程 crond 启动,还可以由用户终端(通常是 shell)执行.</p>
+<p>除这几点之外,守护进程与普通进程基本上没什么区别.因此,编写守护进程实际上是把一个普通进程按照上述的守护进程的特性改造成为守护进程.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      <div>
+      
+        
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/16/并发编程-三/" rel="next" title="并发编程（三）">
+                <i class="fa fa-chevron-left"></i> 并发编程（三）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/17/并发编程-五/" rel="prev" title="并发编程（五）">
+                并发编程（五） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="vilc">
+            
+              <p class="site-author-name" itemprop="name">vilc</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#守护进程介绍"><span class="nav-number">2.</span> <span class="nav-text">守护进程介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建守护进程步骤"><span class="nav-number">3.</span> <span class="nav-text">创建守护进程步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在后台运行"><span class="nav-number">3.0.1.</span> <span class="nav-text">在后台运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脱离控制终端-登陆会话和进程组"><span class="nav-number">3.0.2.</span> <span class="nav-text">脱离控制终端,登陆会话和进程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#禁止进程重新打开控制终端"><span class="nav-number">3.0.3.</span> <span class="nav-text">禁止进程重新打开控制终端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭打开的文件描述符"><span class="nav-number">3.0.4.</span> <span class="nav-text">关闭打开的文件描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改变当前工作目录"><span class="nav-number">3.0.5.</span> <span class="nav-text">改变当前工作目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重设文件创建掩码"><span class="nav-number">3.0.6.</span> <span class="nav-text">重设文件创建掩码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理-SIGCHLD-信号"><span class="nav-number">3.0.7.</span> <span class="nav-text">处理 SIGCHLD 信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#独立运行的守护进程"><span class="nav-number">3.0.8.</span> <span class="nav-text">独立运行的守护进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#由-xinetd-管理的守护进程"><span class="nav-number">3.0.9.</span> <span class="nav-text">由 xinetd 管理的守护进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python守护进程使用"><span class="nav-number">3.1.</span> <span class="nav-text">python守护进程使用</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vilc</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

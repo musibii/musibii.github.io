@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/green/pace-theme-flash.css" rel="stylesheet">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="https://www.sina.com.cn">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面向对象,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="封装三问  什么是封装?  装指的是把属性装进一个容器 封指的是隐藏的意思,但是这种隐藏是对外不对内的  为什么要封装?  封装不是单纯意义的隐藏; ​    封装数据的目的:将数据属性封装起来,类外部的使用就无法直接操作该数据属性 ​    想要在内部操作属性的话需要在类内部提供一个接口给使用者,类的设计者可以在接口之上附加任意逻辑,从而严格控制使用者对属性的操作 ​    封装函数属性的目的:">
+<meta name="keywords" content="面向对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类的三大特性之封装">
+<meta property="og:url" content="https://rsuxwvilc.github.io/2018/10/24/类的三大特性之封装/index.html">
+<meta property="og:site_name" content="rsuxwvilc">
+<meta property="og:description" content="封装三问  什么是封装?  装指的是把属性装进一个容器 封指的是隐藏的意思,但是这种隐藏是对外不对内的  为什么要封装?  封装不是单纯意义的隐藏; ​    封装数据的目的:将数据属性封装起来,类外部的使用就无法直接操作该数据属性 ​    想要在内部操作属性的话需要在类内部提供一个接口给使用者,类的设计者可以在接口之上附加任意逻辑,从而严格控制使用者对属性的操作 ​    封装函数属性的目的:">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fwjlrxnusij31fi0sejwg.jpg">
+<meta property="og:updated_time" content="2019-10-18T06:23:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="类的三大特性之封装">
+<meta name="twitter:description" content="封装三问  什么是封装?  装指的是把属性装进一个容器 封指的是隐藏的意思,但是这种隐藏是对外不对内的  为什么要封装?  封装不是单纯意义的隐藏; ​    封装数据的目的:将数据属性封装起来,类外部的使用就无法直接操作该数据属性 ​    想要在内部操作属性的话需要在类内部提供一个接口给使用者,类的设计者可以在接口之上附加任意逻辑,从而严格控制使用者对属性的操作 ​    封装函数属性的目的:">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fwjlrxnusij31fi0sejwg.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://rsuxwvilc.github.io/2018/10/24/类的三大特性之封装/">
+
+
+
+
+
+  <title>类的三大特性之封装 | rsuxwvilc</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-126643744-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/musibii"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">rsuxwvilc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hahah</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://rsuxwvilc.github.io/2018/10/24/类的三大特性之封装/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vilc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/something.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="rsuxwvilc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">类的三大特性之封装</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-24T17:13:01+08:00">
+                2018-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-10-18T14:23:43+08:00" content="2019-10-18">
+      2019-10-18
+    </time>
+  </span>
+
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/24/类的三大特性之封装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/24/类的三大特性之封装/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5kword
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9min
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>封装三问</strong></p>
+<ol>
+<li>什么是封装?</li>
+</ol>
+<p>装指的是把属性装进一个容器</p>
+<p>封指的是隐藏的意思,但是这种隐藏是对外不对内的</p>
+<ol start="2">
+<li>为什么要封装?</li>
+</ol>
+<p>封装不是单纯意义的隐藏;</p>
+<p>​    封装数据的目的:将数据属性封装起来,类外部的使用就无法直接操作该数据属性</p>
+<p>​    想要在内部操作属性的话需要在类内部提供一个接口给使用者,类的设计者可以在接口之上附加任意逻辑,从而严格控制使用者对属性的操作</p>
+<p>​    封装函数属性的目的:隔离复杂度</p>
+<ol start="3">
+<li>如何封装?</li>
+</ol>
+<p>只需要在属性前加上__开头,该属性就会被隐藏起来,该隐藏具备的特点:</p>
+<pre><code>1. 只是一种语法意义上的变形,即__开头的属性会在检测语法时发生变形,变为\_类名\_\_属性名;
+2. 这种隐藏是对外不对内的,因为在类内部检测语法时所有的代码统一都发生变形;
+3. 这种变形只在检测语法时发生一次,在类定义之后新增的__开头的属性并不会发生变形;
+4. 如果父类不想让子类覆盖自己的属性,可以在属性前加上__开头.
+</code></pre><h1 id="一-封装的意图"><a href="#一-封装的意图" class="headerlink" title="一 封装的意图"></a>一 封装的意图</h1><h3 id="一-封装数据属性的真实意图"><a href="#一-封装数据属性的真实意图" class="headerlink" title="一 封装数据属性的真实意图"></a>一 封装数据属性的真实意图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="comment"># @Time    : 2018/10/24 6:39 PM</span></span><br><span class="line"><span class="comment"># @Author  : MUSIBII</span></span><br><span class="line"><span class="comment"># @Email   : shaozuanzuan@gmail.com</span></span><br><span class="line"><span class="comment"># @File    : 封装数据属性的真实意图.py</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tell_info</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'name: %s age:%s'</span> % (self.__name, self.__age))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_info</span><span class="params">(self, new_name, new_age)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(new_name) <span class="keyword">is</span> <span class="keyword">not</span> str:</span><br><span class="line">            print(<span class="string">'名字必须是str类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> type(new_age) <span class="keyword">is</span> <span class="keyword">not</span> int:</span><br><span class="line">            print(<span class="string">'年龄必须是int类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        self.__name = new_name</span><br><span class="line">        self.__age = new_age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">clear_info</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">del</span> self.__name</span><br><span class="line">        <span class="keyword">del</span> self.__age</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = People(<span class="string">'musibii'</span>, <span class="number">18</span>)</span><br><span class="line"></span><br><span class="line">obj.tell_info()</span><br><span class="line">obj.set_info(<span class="string">'maffia'</span>, <span class="number">23</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="二-封装函数属性的真实意图"><a href="#二-封装函数属性的真实意图" class="headerlink" title="二 封装函数属性的真实意图"></a>二 封装函数属性的真实意图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="comment"># @Time    : 2018/10/24 6:53 PM</span></span><br><span class="line"><span class="comment"># @Author  : MUSIBII</span></span><br><span class="line"><span class="comment"># @Email   : shaozuanzuan@gmail.com</span></span><br><span class="line"><span class="comment"># @File    : 封装函数属性的真实意图.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ATM</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__card</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'插卡'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__auth</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'用户认证'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__input</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'输入提取金额'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__print_bill</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'打印账单'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__take_money</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'取款'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">withdraw</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__card()</span><br><span class="line">        self.__auth()</span><br><span class="line">        self.__input()</span><br><span class="line">        self.__print_bill()</span><br><span class="line">        self.__take_money()</span><br><span class="line"></span><br><span class="line">a = ATM()</span><br><span class="line">a.withdraw()</span><br></pre></td></tr></table></figure>
+<p>我们自己设置的私有属性并不是不让用,而是为了减少复杂度以及保护数据,在类里面定义的私有属性应该怎么访问呢?</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="comment"># @Time    : 2018/10/24 6:39 PM</span></span><br><span class="line"><span class="comment"># @Author  : MUSIBII</span></span><br><span class="line"><span class="comment"># @Email   : shaozuanzuan@gmail.com</span></span><br><span class="line"><span class="comment"># @File    : 封装数据属性的真实意图.py</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age, x)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line">        self.x = x</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tell_info</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'name: %s age:%s'</span> % (self.__name, self.__age))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_info</span><span class="params">(self, new_name, new_age)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(new_name) <span class="keyword">is</span> <span class="keyword">not</span> str:</span><br><span class="line">            print(<span class="string">'名字必须是str类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> type(new_age) <span class="keyword">is</span> <span class="keyword">not</span> int:</span><br><span class="line">            print(<span class="string">'年龄必须是int类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        self.__name = new_name</span><br><span class="line">        self.__age = new_age</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">clear_info</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">del</span> self.__name</span><br><span class="line">        <span class="keyword">del</span> self.__age</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = People(<span class="string">'musibii'</span>, <span class="number">18</span>, <span class="number">13</span>)</span><br><span class="line"></span><br><span class="line">obj.tell_info()</span><br><span class="line">obj.set_info(<span class="string">'maffia'</span>, <span class="number">23</span>)</span><br><span class="line">print(obj.x)</span><br><span class="line">print(obj.__dict__)</span><br><span class="line">print(obj._People__name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"></span><br><span class="line">name: musibii age:<span class="number">18</span></span><br><span class="line"><span class="number">13</span></span><br><span class="line">&#123;<span class="string">'_People__name'</span>: <span class="string">'maffia'</span>, <span class="string">'_People__age'</span>: <span class="number">23</span>, <span class="string">'x'</span>: <span class="number">13</span>&#125;</span><br><span class="line">maffia</span><br></pre></td></tr></table></figure>
+<p>虽然通过直接访问没用,查看对象的名称空间可以看到,原本的__name变形为了_People__name,那么可以通过这个名字访问到对象中的私有属性,同理函数也是一样的方法访问.</p>
+<p>这种变形需要注意的问题是:</p>
+<ol>
+<li>这种机制并没有真正意义上限制我们从外部直接访问属性,知道了类名和属性名就可以拼出名字:_类名__属性,然后就可以访问了,如a._A__N,即这种操作并不是严格意义上的限制外部访问,仅仅只是一种语法意义上的变形,主要用来限制外部的直接访问;</li>
+<li>变形过程只在类的定义时发生一次,在定义后的赋值操作,不会变形.</li>
+<li>在继承中,父类如果不想让子类覆盖自己的方法,可以将方法定义为私有属性.</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 子类继承父类的非私有属性</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fa</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'from A'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.fa()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fa</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'from B'</span>)</span><br><span class="line"></span><br><span class="line">b=B()</span><br><span class="line">b.test()</span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="keyword">from</span> B</span><br><span class="line"></span><br><span class="line"><span class="comment"># 子类和父类具有同名的私有属性,那么在父类调用私有属性的话就以父类的为准</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__fa</span><span class="params">(self)</span>:</span> <span class="comment">#在定义时就变形为_A__fa</span></span><br><span class="line">        print(<span class="string">'from A'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__fa() <span class="comment">#只会与自己所在的类为准,即调用_A__fa</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__fa</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'from B'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">b = B()</span><br><span class="line">b.test()</span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="keyword">from</span> A</span><br></pre></td></tr></table></figure>
+<h1 id="二-封装不是单纯意义的隐藏"><a href="#二-封装不是单纯意义的隐藏" class="headerlink" title="二 封装不是单纯意义的隐藏"></a>二 封装不是单纯意义的隐藏</h1><p>封装的真谛在于<strong>明确的区分内外</strong>,封装的属性可以在内部直接使用,而不能被外部直接使用,然而定义的属性的目的终归是要使用的,外部要想用类隐藏的属性,需要内部提供接口,让外部能够间接地用到我们隐藏起来的属性,那这么做的意义何在?</p>
+<ol>
+<li>封装数据:</li>
+</ol>
+<p>将数据隐藏起来不是目的.隐藏起来然后对外提供操作该数据的接口,然后我们可以在接口附加上对该数据操作的限制,以此完成对数据属性操作的严格控制.</p>
+<ol start="2">
+<li>封装方法:</li>
+</ol>
+<p>封装方法的目的是隔离复杂度,在编程语言里,对外提供的接口(接口可以理解为一个入口),可以是函数,成为接口函数,这与接口的概念不一样,接口代表一组接口函数的集合体.</p>
+<ol start="3">
+<li>了解</li>
+</ol>
+<p>python并不会真的阻止你访问私有属性,模块也遵循这种约定,如果模块名以单下划线开头,那么from <em> import </em>时不能被导入,但是你from module import _private_module依然可以导入.</p>
+<h3 id="三-特性属性"><a href="#三-特性属性" class="headerlink" title="三 特性属性"></a>三 特性属性</h3><p>什么是特性?</p>
+<p>property是一种特殊的属性,访问它时会执行一段功能(函数)然后返回值.类中可能会有某些函数运行后的值是特定的或者就单纯的计算出某种特定的值,那么这种情况下,可以把该函数变为特性.</p>
+<p>为什么要用property?</p>
+<p>将一个类的函数定义为特性后,对象再去使用的时候,可以是访问数据属性一样访问,就好像装饰器一样,其实你根本不知道外面做了什么操作,而property也是一个装饰器.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, weight, height)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.weight = weight</span><br><span class="line">        self.height = height</span><br><span class="line">        </span><br><span class="line">   	<span class="comment"># @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bmi</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.weight / (self.height ** <span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">obj = People(<span class="string">'musibii'</span>, <span class="number">60</span>, <span class="number">1.73</span>)</span><br><span class="line">obj.weight = <span class="number">65</span></span><br><span class="line">print(obj.bmi())</span><br><span class="line"><span class="comment"># 运行结果</span></span><br><span class="line"><span class="number">21.71806608974573</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把注释去掉后,调用方法bmi()就可以像访问属性一样进行访问了.</span></span><br><span class="line">print(obj.bmi)</span><br></pre></td></tr></table></figure>
+<p>另外一种方法也可以实现这种方法:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">yyy_name</span><span class="params">(self, new_name)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(new_name) <span class="keyword">is</span> <span class="keyword">not</span> str:</span><br><span class="line">            print(<span class="string">'名字必须是str类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        self.__name = new_name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zzz_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">del</span> self.__name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">xxx_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'&lt;name:%s&gt;'</span> % self.__name</span><br><span class="line"></span><br><span class="line">    name = property(xxx_name, yyy_name, zzz_name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = People(<span class="string">'musibii'</span>)</span><br><span class="line">print(obj.name)</span><br></pre></td></tr></table></figure>
+<p>这种方法稍显奇怪,其实作用是一样的,但是这种方法有一个需要注意的地方,那就是property类的__init__方法的参数是位置参数,所以严格按照每个方法的位置传值.查看__init__源码可得:</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwjlrxnusij31fi0sejwg.jpg" alt></p>
+<p>想要对该方法操作的数据属性实现删除,修改,查看是和property装饰器结合起来使用的:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name)</span>:</span></span><br><span class="line">        self.__name=name</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'&lt;name:%s&gt;'</span> %self.__name</span><br><span class="line"></span><br><span class="line"><span class="meta">    @name.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(self,new_name)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> type(new_name) <span class="keyword">is</span> <span class="keyword">not</span> str:</span><br><span class="line">            print(<span class="string">'名字必须是str类型'</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        self.__name=new_name</span><br><span class="line"></span><br><span class="line"><span class="meta">    @name.deleter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">del</span> self.__name</span><br><span class="line"></span><br><span class="line">obj=People(<span class="string">'musibii'</span>)</span><br><span class="line">print(obj.name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># obj.name=123</span></span><br><span class="line"><span class="comment"># print(obj.name)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> obj.name</span><br><span class="line">print(obj.__dict__)</span><br></pre></td></tr></table></figure>
+<p>这样才真正实现了在不改变操作数据形式的基础上修改了数据属性的值.</p>
+<p>经过本篇博客可知:封装其实是更高层次的一个函数形式,我觉得类同理,开辟自己的名称空间,减少代码的耦合性,更一步说,操作数据就是操作内存中的数据,其实在内存中有什么函数,类和对象吗?以我现在的知识觉得应该没有,内存中就是一堆冷冰冰的数据,那么除了产生新的对象(可变不可变),其实内存中的值得内存地址都没有变,只是一一个指向引用关系,其实python中也有指针概念的,只是没有c那样需要自己维护罢了,python的变量名和变量名指向的对象的关系就是房子和门牌号的关系,有名字便于找到房子,那么没有名字的房子不像现实生活中还可以存在,没有名字对该房子的引用,那么python的内存管理机制就会把该房子摧毁以便建下一个房子.</p>
+<p>在python中的类和该类产生的对象是如何保存的呢?</p>
+<p>类以及类中的方法在内存中只有一份,而通过类创建的每一个对象都需要在内存中保存一份,那么对象保存的是什么呢?其实就只保存了房子的地址(也就是类对象指针),该值指向当前对象的类.</p>
+<p>当通过对象执行方法时,过程如下:</p>
+<ol>
+<li>根据当前对象中的类对象指针,找到类中的方法;</li>
+<li>将对象当做参数传给方法的第一个参数(self),这个self就是高度封装的一个对象(和类的特性封装不一样),一个self骑士可以容纳万物,只要内存可以装得下.</li>
+</ol>
+<p>python的面向对象里面的封装思想太厉害了.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/面向对象/" rel="tag"><i class="fa fa-tag"></i> 面向对象</a>
+          
+        </div>
+      
+
+      <div>
+      
+        
+
+      
+</div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/23/python的命名空间/" rel="next" title="python的名称空间">
+                <i class="fa fa-chevron-left"></i> python的名称空间
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/24/类的三大特性之多态/" rel="prev" title="类的三大特性之多态">
+                类的三大特性之多态 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/something.jpeg" alt="vilc">
+            
+              <p class="site-author-name" itemprop="name">vilc</p>
+              <p class="site-description motion-element" itemprop="description">Linux Python Vim Git</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/musibii/" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shaozuanzuan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/musibiii" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/10730249/zz-shao" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.instagram.com/musibiiii/" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一-封装的意图"><span class="nav-number">1.</span> <span class="nav-text">一 封装的意图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-封装数据属性的真实意图"><span class="nav-number">1.0.1.</span> <span class="nav-text">一 封装数据属性的真实意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二-封装函数属性的真实意图"><span class="nav-number">1.0.2.</span> <span class="nav-text">二 封装函数属性的真实意图</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#二-封装不是单纯意义的隐藏"><span class="nav-number">2.</span> <span class="nav-text">二 封装不是单纯意义的隐藏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三-特性属性"><span class="nav-number">2.0.1.</span> <span class="nav-text">三 特性属性</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vilc</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">235.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'E8Xo0TLsc16XjxNJjqf2VWNn-gzGzoHsz',
+        appKey: 'paT97If8aHTO6ecx5xz1dhp0',
+        placeholder: 'ヾﾉ≧∀≦)欢迎评论哦',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
