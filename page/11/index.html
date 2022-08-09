@@ -1,747 +1,209 @@
-<!DOCTYPE HTML>
-<html lang="zh-Hans">
-
-
-<head>
-    <meta charset="utf-8">
-    <meta name="keywords" content="rsuxwvilc">
-    <meta name="description" content="Linux Python Vim Git">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-    <title>rsuxwvilc</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
-    
-
-
-    <!-- bg-cover style     -->
-
-
-
-<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-<link rel="stylesheet" type="text/css" href="/css/matery.css">
-<link rel="stylesheet" type="text/css" href="/css/my.css">
-<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
-
-
-
-
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-    <link rel="stylesheet" href="/css/post.css">
-
-
-
-
-
-
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
-
-<meta name="generator" content="Hexo 6.2.0"></head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">rsuxwvilc</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>Contact</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>Friends</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-  <li>
-    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
-      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">rsuxwvilc</div>
-        <div class="logo-desc">
-            
-            Linux Python Vim Git
-            
-        </div>
-    </div>
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			Contact
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			Friends
-		</a>
-          
-        </li>
-        
-        
-        <li><div class="divider"></div></li>
-        <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
-            </a>
-        </li>
-        
-    </ul>
-</div>
-
-
-        </div>
-
-        
-            <style>
-    .nav-transparent .github-corner {
-        display: none !important;
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>rsuxwvilc - hahah</title><meta name="author" content="vilc"><meta name="copyright" content="vilc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux Python Vim Git">
+<meta property="og:type" content="website">
+<meta property="og:title" content="rsuxwvilc">
+<meta property="og:url" content="https://rsuxwvilc.github.io/page/11/index.html">
+<meta property="og:site_name" content="rsuxwvilc">
+<meta property="og:description" content="Linux Python Vim Git">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="vilc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://rsuxwvilc.github.io/page/11/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'rsuxwvilc',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-08-09 15:43:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-    .github-corner {
-        position: absolute;
-        z-index: 10;
-        top: 0;
-        right: 0;
-        border: 0;
-        transform: scale(1.1);
-    }
-
-    .github-corner svg {
-        color: #0f9d58;
-        fill: #fff;
-        height: 64px;
-        width: 64px;
-    }
-
-    .github-corner:hover .octo-arm {
-        animation: a 0.56s ease-in-out;
-    }
-
-    .github-corner .octo-arm {
-        animation: none;
-    }
-
-    @keyframes a {
-        0%,
-        to {
-            transform: rotate(0);
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
         }
-        20%,
-        60% {
-            transform: rotate(-25deg);
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
         }
-        40%,
-        80% {
-            transform: rotate(10deg);
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
         }
+        return item.value
+      }
     }
-</style>
-
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
-    <svg viewBox="0 0 250 250" aria-hidden="true">
-        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
-              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
-              fill="currentColor" class="octo-body"></path>
-    </svg>
-</a>
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
         
-    </nav>
-
-</header>
-
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
     
-    <div class="bg-cover pd-header about-cover">
-    <div class="container">
-    <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                hahah
-                
-            </div>
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">39</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">rsuxwvilc</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">rsuxwvilc</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/16/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%B8%89/" title="并发编程（三）">并发编程（三）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-16T11:50:28.000Z" title="Created 2018-11-16 19:50:28">2018-11-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a></span></div><div class="content">前言经过前一篇博客的学习了解了 Unix 和 Windows 系统创建进程的方式了,对于 Unix系统来说,会把父进程的数据直接拷贝一份到子进程的内存空间;而 Windows 系统会重新加载一遍父进程的代码.
+那么在 python 中怎么创建进程呢?其实也是调用了操作系统提供的接口,像 Unix 是 fork 接口, Windows 是 CreateProcess 接口.
+python 进程Process 源码探析首先不管怎么创建进程都是调用了一个multiprocessing模块里面的 Process 类,学习一个模块第一件事就是查看源码.(ps: 对我来说看源码很爽😋)因为 python3看不到源码,所以用 python2可以看到:
 
-            <div class="description center-align">
-                
-                <span id="subtitle"></span>
-                <script src="/libs/typed/typed.js"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            
-                                "从来没有真正的绝境, 只有心灵的迷途",
-                            
-                                "Never really desperate, only the lost of the soul",
-                            
-                        ],
-                        startDelay: 300,
-                        typeSpeed: 100,
-                        loop: true,
-                        backSpeed: 50,
-                        showCursor: true
-                    });
-                </script>
-                
-            </div>
-        </div>
-    </div>
-</div>
+翻译 Process 类的注释:进程对象表示在隔开的进程中运行的活动,这个类和 threading.Thread 同义.(因为最开始的计算机都是单核,多进程是后面才出来的)
+那么很显然,因为 Process 是个类,那么想要创建一个进程就是实例化一个 Process 类的对象.查看__ init__方法:
 
-
-<script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
-</script>
-
-
-    </div>
-</div>
-
-
-<main class="content">
-
-    
-
-    
-
-    <!-- 所有文章卡片 -->
-    <article id="articles" class="container articles">
-        <div class="row article-row">
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/16/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%B8%89/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="并发编程（三）">
-                            
-                            <span class="card-title">并发编程（三）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言经过前一篇博客的学习了解了 Unix 和 Windows 系统创建进程的方式了,对于 Unix系统来说,会把父进程的数据直接拷贝一份到子进程的内存空间;而 Windows 系统会重新加载一遍父进程的代码.
-那么在 python 中怎么创
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-16
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    并发编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/16/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BA%8C/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="并发编程（二）">
-                            
-                            <span class="card-title">并发编程（二）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言在第三代计算机的发展中因为出现了多道技术使得同一时刻可以在内存中同时运行多个程序,那么这样就产生了进程的概念.
+哇,参数好多啊,不过大部分都可以使用默认 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/16/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%BA%8C/" title="并发编程（二）">并发编程（二）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-16T07:57:31.000Z" title="Created 2018-11-16 15:57:31">2018-11-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a></span></div><div class="content">前言在第三代计算机的发展中因为出现了多道技术使得同一时刻可以在内存中同时运行多个程序,那么这样就产生了进程的概念.
 在本篇博客中将介绍进程相关的理论知识,对操作系统进一步的认识.
-进程什么是进程进程( process),是指计算机中已运行的
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-16
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    并发编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/11/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%85%AD/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="网络编程（六）">
-                            
-                            <span class="card-title">网络编程（六）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢?
+进程什么是进程进程( process),是指计算机中已运行的程序.进程曾经是分时系统的基本运行单位.在面向进程设计的系统(如早期的 UNIX,Linux2.4及更早的版本)中,进程是程序的基本执行实体,是操作系统的资源单位;在面向线程设计的系统(如当代多数操作系统, Linux2.6及更新的版本)中,进程本身不是基本运行单位,运行单位变为线程,进程是线程的容器.程序本身只是指令,数据及其组织形式的描述,进程才是(指令和数据)的真正运行实例.若干进程有可能与同一个程序相关系,且每个进程皆可以同步(循序)或异步(平行)的方式独立运行.现代计算机系统因为空间共享(空间复用)可在同一段时间内以进程的形式将多个程序加载到存储器中,并借由时间共享(时间复用),以在一个处理器上表现出异步(平行)运行的感觉.
+###开启进程需要的资源
+用户下达运行程序的命令后,就会产生进程.同一程序可产生多个进程(一对多的关系),以允许同时 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/11/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%85%AD/" title="网络编程（六）">网络编程（六）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-11T08:12:44.000Z" title="Created 2018-11-11 16:12:44">2018-11-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/socketserver%E6%BA%90%E7%A0%81%E6%8E%A2%E6%9E%90/">socketserver源码探析</a></span></div><div class="content">前言在上篇文章解决了 TCP 和 UDP 并发的问题,是通过一个 socketserver模块实现的,那么这个模块到底做了什么可以实现并发的效果呢?
 socketserver 源码分析进入 socketserver 中查看注释:
 
-翻译如下
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-11
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/socketserver%E6%BA%90%E7%A0%81%E6%8E%A2%E6%9E%90/" class="post-category">
-                                    socketserver源码探析
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+翻译如下:
+通用套接字服务类
+该模块试图捕获定义服务器的各个方面
+基于套接字的服务器
+基于请求的服务器
+在进一步查看请求之前进行客户地址验证,(这实际上是一个钩子,用于任何需要在进行其他操作之前查看请求的处理)
+如何处理多个请求:
+​	同步(一次处理一个请求)
+​	分叉(每个请求由一个新进程处理)
+​	线程化(每个请求由一个新线程处理)
+这个模块的类喜欢编写最简单的服务器类型:一个同步的 TCP&#x2F;IP 服务器.这是糟糕的设计,但是节省了一些输入.(还有一个问题是,深度类层次结构会减慢方法查找的速度)
+在继承关系图中有五个类,其中四个表示四种类型的同步服务器:
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/11/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%B8%80/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="并发编程（一）">
-                            
-                            <span class="card-title">并发编程（一）</span>
-                        </div>
-                    </a>
+注意UnixDatagramServer 继承于 UDPServer, 而不是 UnixStreamServer–IP 和 Unix 服务器之间的唯一区别是地址族,这在两个 Unix 服务器 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/11/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E4%B8%80/" title="并发编程（一）">并发编程（一）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-11T05:43:16.000Z" title="Created 2018-11-11 13:43:16">2018-11-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a></span></div><div class="content">前言该系列为并发编程,在几乎所有的编程语言中,并发始终是绕不开的坎,可以说学习一门编程语言,学好了并发就说明这门语言你学的还可以.所以接下来就让我们好好看看 python 的并发是怎么实现的吧.
+在学习并发之前,有必要学习一下计算机操作系统发展史,因为可以实现并发可操作系统的发展是分不开的.
+操作系统发展史操作系统的发展史在某种意义上来说也是计算机的发展史.操作系统提供对硬件控制的调用和应用程序所必需的功能.
+背景早期的计算机没有操作系统.只有单独的机器,操作者会带着记录有程序和数据的卡片或较后期的打孔纸带去操作机器.程序读入机器后,机器就开始工作直到程序停止.由于程序难免有误,所以机器通常都会中途崩溃.程序一般通过控制板的开关和状态灯来调试.
+后来,机器引入帮助程序输入输出等工作的代码库.这是现代操作系统的起源.然而,机器每次只能执行一个任务.在英国剑桥大学,这些任务的磁从前是排成一排挂在衣钩上的,衣钩的颜色代表任务的优先级.
+概念意义上的操作系统和通俗意义上的操作系统差距越来越大.通俗意义上的操作系统为了方便而把最普通的包和应用程序的集合包括在操作系统内.随着操作系统的发展,一些功 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%94/" title="网络编程（五）">网络编程（五）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-10T11:14:45.000Z" title="Created 2018-11-10 19:14:45">2018-11-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="content">前言在上一篇文章中我们学习了 基于 TCP 套接字的服务端和客户端通信,并解决了粘包的问题,解决粘包问题的思路很简单,就是确保接受方能够把数据收取干净,发多少,就收多少.
+出现粘包的问题:原因有两个,一个是接收数据量少于发送数据量;一个是因为为了优化 TCP 的传输效率,使用了 Nagle算法,当客户端连续发送时间间隔很短的两个数据包时,在未确认数据发送的时候让发送器把数据送到系统缓存里.任何数据随后继续直到得到明显的数据确认或者直到攒到了一定数量的数据了再发包.
+这是不可避免的,为了优化传输效率,尽量发送大块数据,避免网络中充斥的许多小数据块.知道了解决方法,那么避免粘包就很简单了,只需要在每次发送数据之前先发送真实数据的长度,然后接收方可以根据收到的真实长度收取数据了.
+SOCKET使用SOCKET AF_INET套接字主要有两种协议,现在来看 UDP 协议是如何进行网络通信的.
+基于 UDP 连接的套接字tcp 是无连接,不稳点的套接字,但是传输效率较高,所以在某些应用上如实时直播,游戏, DNS 服务器,DHCP 服务器等等.
+服务端
+12345678910from socke ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/09/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%9B%9B/" title="网络编程（四）">网络编程（四）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-09T07:25:11.000Z" title="Created 2018-11-09 15:25:11">2018-11-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="content">前言经过之前三篇文章的学习我们大致了解了互联网是如何基于五层协议进行通信了,由应用层产生数据,然后进行封装,依次经过传输层,网络层,数据链路层的封装最后由物理层发送电信号进行数据的传输,在接收端首先由物理层接收到字节型的数据,然后拆包,验证 MAC 地址, IP 地址和端口,最后由目标应用获取数据并解码出来.
 
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言该系列为并发编程,在几乎所有的编程语言中,并发始终是绕不开的坎,可以说学习一门编程语言,学好了并发就说明这门语言你学的还可以.所以接下来就让我们好好看看 python 的并发是怎么实现的吧.
-在学习并发之前,有必要学习一下计算机操作系统
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-11
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    并发编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+那么为了使用 TCP 协议建立连接,不用去管什么三次握手四次挥手以及数据到底是怎么在互联网中传输的,在应用层和传输层虚拟出一个抽象层,叫 socket( 套接字)层,这是一个模块为我们封装好了很多底层的协议,以便于我们只关注与实际的数据传输,而不用关系底层的实现.
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%94/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="网络编程（五）">
-                            
-                            <span class="card-title">网络编程（五）</span>
-                        </div>
-                    </a>
+所以我们就直接使用套接字和网络通信进行交互.
+socketsocket是什么socket是应用层与 TCP&#x2F;IP协议族通信的中间软件抽象层,它是一组接口.在设计模式中, socket 就是一个模块,它把复杂的 TCP&#x2F;IP 协议族隐藏在 socket 接口后面,对用户来说,一组简单的接口就是全部,让 socket 去组织数据,以符合指定的协议.
+也有人说, socket 其实就是 ip 和 po ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/07/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%89/" title="网络编程（三）">网络编程（三）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-07T13:09:17.000Z" title="Created 2018-11-07 21:09:17">2018-11-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="content">在之前两篇文章我们已经大概了解了互联网的工作原理,知道了一个数据包的诞生与结束中间经历的过程,那么在这篇博客我们将了解一个稳定可靠地 TCP 连接是怎么产生的,它的数据传送有什么优点和缺点?
+该博客将重点介绍 传输层的 TCP 协议建立连接和断开连接的过程. UDP 因为不是可靠的连接所以就不重点介绍了.
+介绍在传输层通常遵循的协议为 TCP 和 UDP协议,并且是基于端口运行的,但是两者为应用层提供不同的服务. TCP 提供的是一种稳定,可靠地字节流服务.
+面向连接意味着两个使用 TCP 的应用在数据传送之前需要建立 TCP 连接.这一过程可以理解为打电话,先拨号,等待接通,然后稳定的通信.
+那么 UDP 是无连接,不可靠的数据包服务,因为无连接,所以可能会产生丢包,但是效率却较高,因为不用对方发送确认包,所以 UDP 广泛应用与游戏,直播等软件.
+TCP 报文格式在网络编程(二)中已经知道 TCP是基于端口发送数据包的,所以会记录本机端口号和目的端口号,具体格式如下:
 
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言在上一篇文章中我们学习了 基于 TCP 套接字的服务端和客户端通信,并解决了粘包的问题,解决粘包问题的思路很简单,就是确保接受方能够把数据收取干净,发多少,就收多少.
-出现粘包的问题:原因有两个,一个是接收数据量少于发送数据量;一个是因
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-10
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    网络编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+上图有几个重要的字段需要了解:
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/09/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E5%9B%9B/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="网络编程（四）">
-                            
-                            <span class="card-title">网络编程（四）</span>
-                        </div>
-                    </a>
+序 列号: seq 序号,占32位,用来标识从 TCP 源端向目的端发送的字节 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/06/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%8C/" title="网络编程（二）">网络编程（二）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-06T13:15:55.000Z" title="Created 2018-11-06 21:15:55">2018-11-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="content">六 网络编程(一)总结首先对网络编程(一)做个总结:我们现在知道互联网通信其实就是发送数据包与接收数据包.电脑 A 向电脑 B 发送一个数据包, B 收到然后回复一个数据包,才实现了电脑之间的通信.数据包的结构,基本是下图的形式:
 
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                前言经过之前三篇文章的学习我们大致了解了互联网是如何基于五层协议进行通信了,由应用层产生数据,然后进行封装,依次经过传输层,网络层,数据链路层的封装最后由物理层发送电信号进行数据的传输,在接收端首先由物理层接收到字节型的数据,然后拆包,验证
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-09
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    网络编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+想要发送这个数据包需要知道两个地址:
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/07/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%89/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="网络编程（三）">
-                            
-                            <span class="card-title">网络编程（三）</span>
-                        </div>
-                    </a>
+对方的 MAC 地址
+对方的 IP 地址
 
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                在之前两篇文章我们已经大概了解了互联网的工作原理,知道了一个数据包的诞生与结束中间经历的过程,那么在这篇博客我们将了解一个稳定可靠地 TCP 连接是怎么产生的,它的数据传送有什么优点和缺点?
-该博客将重点介绍 传输层的 TCP 协议建立连接
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-07
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    网络编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+只有发送方知道这两个地址,数据包才可以准确的发送到接收方.之前已经了解,单纯的 MAC 地址是有局限性的,就是只能在一个局域网内通过MAC 地址通信,如果两台计算机不在一个局域网,那么只能发送给网关( gateway),由网关走路由协议发送给对方.
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/06/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%8C/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="网络编程（二）">
-                            
-                            <span class="card-title">网络编程（二）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                六 网络编程(一)总结首先对网络编程(一)做个总结:我们现在知道互联网通信其实就是发送数据包与接收数据包.电脑 A 向电脑 B 发送一个数据包, B 收到然后回复一个数据包,才实现了电脑之间的通信.数据包的结构,基本是下图的形式:
-
-想要发
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-06
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    网络编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%80/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="网络编程（一）">
-                            
-                            <span class="card-title">网络编程（一）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                一 客户端&#x2F;服务端架构
+上图中,1号狄电脑想要个4号电脑通信.首先需要知道对方电脑的 IP 和子网掩码,然后通过 ARP 协议计算出自己和对方的网络号,然后判断是否处于同一个局域网,不是的话,1号电脑将数据包发给网关 A. 网关 A 通过路由协议,发现4号电脑位于网络 B, 又把数据包发给网关 B, 网关 B 再转发给4号电脑.
+1号电脑想要把数据包发给网关 A, 首先必须知道网关 A 的 MAC 地址.所以,数据包的目标地址,实际上分为两种情况:
+ ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%80/" title="网络编程（一）">网络编程（一）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-02T11:05:27.000Z" title="Created 2018-11-02 19:05:27">2018-11-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="content">一 客户端&#x2F;服务端架构
 硬件 C&#x2F;S 架构
 
 软件 C&#x2F;S 架构
@@ -750,48 +212,27 @@ socketserver 源码分析进入 socketserver 中查看注释:
 
 服务端需要遵循的原则:
 
-服务端与客
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-02
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
-                                    网络编程
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+服务端与客户端都需要有惟一的地址,但是服务端的地址必须固定&#x2F;绑定
+对外一直提供服务,需要稳定运行
+服务端需要支持并发
 
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/11/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="异常处理">
-                            
-                            <span class="card-title">异常处理</span>
-                        </div>
-                    </a>
 
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                异常之问
+网络
+网络建立的目的是为了数据交互(通信)
+如何实现通信:
+ 1. 建立好底层的物理连接介质
+ 2. 有一套统一的通信标准,称之为互联网协议
+
+
+互联网协议:就是计算机界的标准语言
+
+
+二 七层模型总览互联网的实现,总共可以分为七层.每一层都靠下一层的支持.用户接触的是第七层,也就是应用层.想要理解互联网协议,必须从最下层开始,自下而上理解每一层的功能.
+OSI 模型可以分为七层,五层,四层,其实都是一个道理,只不过合并了几层而已.从下而上分别为:物理层,数据链路层,网络层,传输层,会话层,表示层,应用层.
+
+每层运行常见的物理设备:
+
+三 tcp&#x2F;IP 五层模型理解一般讲应用层,表示层,会话层并做应用层,从 tcp&# ...</div></div></div><div class="recent-post-item"><div class="recent-post-info"><a class="article-title" href="/2018/11/01/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="异常处理">异常处理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2018-11-01T06:48:01.000Z" title="Created 2018-11-01 14:48:01">2018-11-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">异常之问
 
 什么是异常?
 
@@ -799,394 +240,30 @@ socketserver 源码分析进入 socketserver 中查看注释:
 
 
 Traceback 为异常的追踪信息
-N
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-01
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Python/" class="post-category">
-                                    Python
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+NameError 为异常的类型
+name ‘a’ is not defined 为异常值
 
-                    
-                </div>
+在 Python 中的错误分为两种:
+
+语法错误:这种错误,通过不了 python 的语法检测,这种错误也捕捉不了,必须在程序执行前改正.
+逻辑异常:语法没问题,通过了 Python的语法检测,但因为对 python 数据类型的错误使用导致出错.
+
+
+异常的种类
+
+在 Python 中不同的异常可以用不同的类型( python 中统一了类与类型,类型即类)去标识,一个异常标识一种错误.
+常用异常:
+AttributeError 试图访问一个对象没有的属性
+IOError 输入/输出异常;通常为无法打开文件
+ImportError 无法引入模块或包;基本上是路径问题或名称错误
+IndentationError 语法错误的子类;代码没有正确对其
+IndexErro ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/10/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#content-inner">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/#content-inner">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/#content-inner">15</a><a class="extend next" rel="next" href="/page/12/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">vilc</div><div class="author-info__description">Linux Python Vim Git</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">39</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><div class="content"><a class="title" href="/2020/07/08/Sorting-HOW-TO/" title="Sorting HOW TO">Sorting HOW TO</a><time datetime="2020-07-08T09:40:07.000Z" title="Created 2020-07-08 17:40:07">2020-07-08</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/2019/12/10/python-%E8%B0%83%E8%AF%95%E5%99%A8%E4%B9%8B-pdb/" title="python 调试器之 pdb">python 调试器之 pdb</a><time datetime="2019-12-10T05:50:16.000Z" title="Created 2019-12-10 13:50:16">2019-12-10</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/2019/10/18/%E6%95%B0%E6%8D%AE%E5%BA%93-%E4%B8%80/" title="数据库（一）">数据库（一）</a><time datetime="2019-10-18T06:23:45.000Z" title="Created 2019-10-18 14:23:45">2019-10-18</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/2019/10/18/hello-world/" title="Hello World">Hello World</a><time datetime="2019-10-18T06:23:43.000Z" title="Created 2019-10-18 14:23:43">2019-10-18</time></div></div><div class="aside-list-item"><div class="content"><a class="title" href="/2019/07/27/ubuntu-%E5%AE%89%E8%A3%85-Docker-CE/" title="ubuntu 安装 Docker CE">ubuntu 安装 Docker CE</a><time datetime="2019-07-27T08:13:19.000Z" title="Created 2019-07-27 16:13:19">2019-07-27</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            <a class="card-more-btn" href="/categories/" title="More">
+    <i class="fas fa-angle-right"></i></a>
             </div>
-              <!-- 隐藏某个文章 -->
-            
-        </div>
-    </article>
-
-</main>
-
-
-<div class="container paging">
-    <div class="row">
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/10/"
-               class="left btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-left"></i>
-            </a>
-            
-        </div>
-        <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">11 / 15</div>
-        </div>
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/12/"
-               class="right btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-right"></i>
-            </a>
-            
-        </div>
-    </div>
-</div>
-
-
-
-
-    <footer class="page-footer bg-color">
-    
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="503838841"
-                   fixed='true'
-                   autoplay='false'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
-
-    
-
-    <div class="container row center-align"
-         style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            
-                <span id="year">2019-2022</span>
-            
-            <a href="/about" target="_blank">vilc</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br>
-            
-            
-            
-                
-            
-            
-                <span id="busuanzi_container_site_pv">
-                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
-                    <span id="busuanzi_value_site_pv" class="white-color"></span>
-            </span>
-            
-            
-                <span id="busuanzi_container_site_uv">
-                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
-                    <span id="busuanzi_value_site_uv" class="white-color"></span>
-            </span>
-            
-            <br>
-
-            <!-- 运行天数提醒. -->
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script type="text/javascript">
-$(function () {
-    var searchFunc = function (path, search_id, content_id) {
-        'use strict';
-        $.ajax({
-            url: path,
-            dataType: "xml",
-            success: function (xmlResponse) {
-                // get the contents from search data
-                var datas = $("entry", xmlResponse).map(function () {
-                    return {
-                        title: $("title", this).text(),
-                        content: $("content", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-                var $input = document.getElementById(search_id);
-                var $resultContent = document.getElementById(content_id);
-                $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
-                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                    $resultContent.innerHTML = "";
-                    if (this.value.trim().length <= 0) {
-                        return;
-                    }
-                    // perform local searching
-                    datas.forEach(function (data) {
-                        var isMatch = true;
-                        var data_title = data.title.trim().toLowerCase();
-                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
-                        var data_url = data.url;
-                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
-                        var index_title = -1;
-                        var index_content = -1;
-                        var first_occur = -1;
-                        // only match artiles with not empty titles and contents
-                        if (data_title !== '' && data_content !== '') {
-                            keywords.forEach(function (keyword, i) {
-                                index_title = data_title.indexOf(keyword);
-                                index_content = data_content.indexOf(keyword);
-                                if (index_title < 0 && index_content < 0) {
-                                    isMatch = false;
-                                } else {
-                                    if (index_content < 0) {
-                                        index_content = 0;
-                                    }
-                                    if (i === 0) {
-                                        first_occur = index_content;
-                                    }
-                                }
-                            });
-                        }
-                        // show search results
-                        if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
-                            var content = data.content.trim().replace(/<[^>]+>/g, "");
-                            if (first_occur >= 0) {
-                                // cut out 100 characters
-                                var start = first_occur - 20;
-                                var end = first_occur + 80;
-                                if (start < 0) {
-                                    start = 0;
-                                }
-                                if (start === 0) {
-                                    end = 100;
-                                }
-                                if (end > content.length) {
-                                    end = content.length;
-                                }
-                                var match_content = content.substr(start, end);
-                                // highlight all keywords
-                                keywords.forEach(function (keyword) {
-                                    var regS = new RegExp(keyword, "gi");
-                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
-                                });
-
-                                str += "<p class=\"search-result\">" + match_content + "...</p>"
-                            }
-                            str += "</li>";
-                        }
-                    });
-                    str += "</ul>";
-                    $resultContent.innerHTML = str;
-                });
-            }
-        });
-    };
-
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
-});
-</script>
-
-    <!-- 白天和黑夜主题 -->
-<div class="stars-con">
-    <div id="stars"></div>
-    <div id="stars2"></div>
-    <div id="stars3"></div>  
-</div>
-
-<script>
-    function switchNightMode() {
-        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
-        setTimeout(function () {
-            $('body').hasClass('DarkMode') 
-            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
-            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
-            
-            setTimeout(function () {
-            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
-                $(this).remove()
-            })
-            }, 2e3)
-        })
-    }
-</script>
-
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    
-
-    
-
-    <!-- 雪花特效 -->
-    
-
-    <!-- 鼠标星星特效 -->
-    
-
-     
-        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-        <script src="/libs/others/TencentCaptcha.js"></script>
-        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
-    
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-<script>
-    (function () {
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        } else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
-</script>
-
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    <!--腾讯兔小巢-->
-    
-    
-
-    
-
-    
-
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
-
-</html>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CSS/"><span class="card-category-list-name">CSS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Computer-Basics/"><span class="card-category-list-name">Computer Basics</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Django/"><span class="card-category-list-name">Django</span><span class="card-category-list-count">16</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Django-restframework/"><span class="card-category-list-name">Django-restframework</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Django-restframework-%E6%BA%90%E7%A0%81/"><span class="card-category-list-name">Django-restframework 源码</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Django-restframework%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><span class="card-category-list-name">Django-restframework源码分析</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/GitHub/"><span class="card-category-list-name">GitHub</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/NameSpace/" style="font-size: 1.1em; color: #999">NameSpace</a> <a href="/tags/None/" style="font-size: 1.1em; color: #999">None</a> <a href="/tags/day46/" style="font-size: 1.1em; color: #999">day46</a> <a href="/tags/out/" style="font-size: 1.1em; color: #999">out</a> <a href="/tags/python/" style="font-size: 1.1em; color: #999">python</a> <a href="/tags/%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97/" style="font-size: 1.1em; color: #999">内置模块</a> <a href="/tags/%E5%8C%85%E3%80%81%E6%96%87%E4%BB%B6/" style="font-size: 1.1em; color: #999">包、文件</a> <a href="/tags/%E5%8F%91%E7%8E%B0/" style="font-size: 1.1em; color: #999">发现</a> <a href="/tags/%E5%91%90%E5%96%8A/" style="font-size: 1.1em; color: #999">呐喊</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 1.1em; color: #999">对象</a> <a href="/tags/%E6%9D%8E%E5%BF%97/" style="font-size: 1.1em; color: #999">李志</a> <a href="/tags/%E6%A8%A1%E5%9D%97/" style="font-size: 1.5em; color: #99a9bf">模块</a> <a href="/tags/%E6%B5%AE%E5%8A%A8/" style="font-size: 1.1em; color: #999">浮动</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 1.3em; color: #99a1ac">面向对象</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">July 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/12/"><span class="card-archive-list-date">December 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/10/"><span class="card-archive-list-date">October 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/07/"><span class="card-archive-list-date">July 2019</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/05/"><span class="card-archive-list-date">May 2019</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/04/"><span class="card-archive-list-date">April 2019</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/03/"><span class="card-archive-list-date">March 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/02/"><span class="card-archive-list-date">February 2019</span><span class="card-archive-list-count">26</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">141</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-08-09T07:43:24.574Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By vilc</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
