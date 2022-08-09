@@ -1,37 +1,1264 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="数据库（七）, rsuxwvilc">
+    <meta name="description" content="前言本篇博客学习内容为视图、触发器、事务、存储过程、函数、数据备份及流程控制。
+视图什么是视图？视图是由一张表或多张表的查询结果构成的一张虚拟表，建立一张视图后会在数据库中保留一个以 frm 后缀结尾的文件，只保留了数据结果，所有的数据都来">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
 
-{% block page_class %}page-post-detail{% endblock %}
+
+    <title>数据库（七） | rsuxwvilc</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
 
 
-{% block content %}
+    <!-- bg-cover style     -->
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">rsuxwvilc</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">rsuxwvilc</div>
+        <div class="logo-desc">
+            
+            Linux Python Vim Git
+            
+        </div>
     </div>
-  </div>
 
-{% endblock %}
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">数据库（七）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                数据库
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-11-26
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本篇博客学习内容为视图、触发器、事务、存储过程、函数、数据备份及流程控制。</p>
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><h2 id="什么是视图？"><a href="#什么是视图？" class="headerlink" title="什么是视图？"></a>什么是视图？</h2><p>视图是由一张表或多张表的查询结果构成的一张虚拟表，建立一张视图后会在数据库中保留一个以 frm 后缀结尾的文件，只保留了数据结果，所有的数据都来自 sql 语句。</p>
+<h2 id="为什么使用视图？"><a href="#为什么使用视图？" class="headerlink" title="为什么使用视图？"></a>为什么使用视图？</h2><p>在进行多表查询的时候，sql 语句会非常非常长，比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select t1.student_id from (select student_id,num from score where course_id = (select cid from course where cname = &#x27;物理&#x27;)) as t1 join(select student_id,num from score where course_id = (select cid from course where cname = &#x27;生物&#x27;)) as t2 on t1.student_id = t2.student_id where t1.num &gt; t2.num;</span><br></pre></td></tr></table></figure>
+
+<p>看是不是很长，这还只是三表查询，如果遇到更加复杂的表结构肯定会更长，不过那样的话对表的维护困难也加大了。如果每次都编写需要得到相同数据的 sql 语句会是一件很麻烦的事，可以把经常需要查询的 sql 语句转变为视图就可以避免重复写 sql 语句的问题。</p>
+<p>视图除了可以减少 sql 语句的编写次数，还可以使用不同的视图来展示不同数据的访问，那么给某些用户设置权限不就可以了吗？注意，设置的权限要么只能看某张表的全部数据，要么只能看某张表中的某个 column 的数据，也就是列数据，列数据只是保存了字段名，比如说我要查看我的当月工资，是需要查看一行数据的，这样权限就帮不了忙了。（当然可以加 where 条件，在这里是介绍视图）</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><h3 id="创建视图"><a href="#创建视图" class="headerlink" title="创建视图"></a>创建视图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create [or replace] view 视图名 [(column_list)] as select_statement;</span><br></pre></td></tr></table></figure>
+
+<p>加上 or replace 时如果已经存在相同视图则替换原有视图，column_list 指定哪些字段要出现在视图中。<strong>注意：由于是一张虚拟表，视图中的数据实际来源于其他表，所以在视图中的数据不会出现在硬盘上，也就是只会保存一份数据结构。</strong></p>
+<h3 id="使用视图"><a href="#使用视图" class="headerlink" title="使用视图"></a>使用视图</h3><p>视图是一张虚拟表，所以使用方式与普通表没有区别。</p>
+<h3 id="查看视图"><a href="#查看视图" class="headerlink" title="查看视图"></a>查看视图</h3><ol>
+<li>查看数据结构</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; desc view_name;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看创建语句</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show create view view_name;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改视图"><a href="#修改视图" class="headerlink" title="修改视图"></a>修改视图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter view_name select_statement;</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; drop view view_name;</span><br></pre></td></tr></table></figure>
+
+<h2 id="具体使用"><a href="#具体使用" class="headerlink" title="具体使用"></a>具体使用</h2><h3 id="案例一：简化多表-sql-语句"><a href="#案例一：简化多表-sql-语句" class="headerlink" title="案例一：简化多表 sql 语句"></a>案例一：简化多表 sql 语句</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 准备数据</span><br><span class="line">mysql&gt; create database db02 charset utf8;</span><br><span class="line">mysql&gt; use db02;</span><br><span class="line">mysql&gt; create table student(</span><br><span class="line">	   s_id int(3),</span><br><span class="line">	   name varchar(20),</span><br><span class="line">       math float,</span><br><span class="line">       chinese float);</span><br><span class="line">mysql&gt; insert into student values(1,&#x27;tom&#x27;,80,70),(2,&#x27;jack&#x27;,80,80),(3,&#x27;rose&#x27;,60,75);</span><br><span class="line">mysql&gt; create table stu_info(</span><br><span class="line">	   s_id int(3),</span><br><span class="line">       class varchar(50),</span><br><span class="line">       addr varchar(100));</span><br><span class="line">mysql&gt; insert into stu_info values(1,&#x27;二班&#x27;,&#x27;安徽&#x27;)，(2，&#x27;二班&#x27;,&#x27;湖南&#x27;),(3,&#x27;三班&#x27;,&#x27;黑龙江&#x27;)；</span><br><span class="line"># 创建视图包含编号、学生姓名、班级</span><br><span class="line">mysql&gt; create view stu_v (编号,姓名,班级) as select student.s_id,student.name,stu_info.class from student,stu_info where student.s_id = stu_info.s_id;</span><br><span class="line"># 查看视图中的数据</span><br><span class="line">mysql&gt; select * from stu_v;</span><br></pre></td></tr></table></figure>
+
+<h3 id="案例二：隔离数据"><a href="#案例二：隔离数据" class="headerlink" title="案例二：隔离数据"></a>案例二：隔离数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 创建工资表</span><br><span class="line">mysql&gt; create table salarys(</span><br><span class="line">	   id int primary key,</span><br><span class="line">       name char(10),</span><br><span class="line">       salary double,</span><br><span class="line">       dept char(10));</span><br><span class="line">mysql&gt; insert into salarys values</span><br><span class="line">	   (1,&#x27;刘强东&#x27;,800000,&#x27;市场&#x27;),</span><br><span class="line">	   (2,&#x27;马云&#x27;,899990,&#x27;市场&#x27;),</span><br><span class="line">	   (3,&#x27;李彦宏&#x27;,989090,&#x27;市场&#x27;),</span><br><span class="line">	   (4,&#x27;马化腾&#x27;,88889999,&#x27;财务&#x27;);</span><br><span class="line"># 创建市场部视图</span><br><span class="line">mysql&gt; create view dept_sc as select * from salarys where dept = &#x27;市场&#x27;;</span><br><span class="line">mysql&gt; select * from dept_sc;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：对视图数据的 insert update delete 会同步到原表中，但由于视图可能是部分字段，很多时候会失败。</strong></p>
+<p><strong>总结：mysql 可以分担程序中的部分逻辑，但这样一来后续的维护会变得更麻烦。如果需要改表结构，那意味着视图也需要相应的修改，没有直接在程序中修改 sql 来的方便。</strong></p>
+<h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h1><h2 id="什么是触发器？"><a href="#什么是触发器？" class="headerlink" title="什么是触发器？"></a>什么是触发器？</h2><p>触发器是一段与表有关的 mysql 程序，当这个表在某个时间点发生了某种事件时，将会自动执行相应的触发器程序。</p>
+<h2 id="何时使用触发器"><a href="#何时使用触发器" class="headerlink" title="何时使用触发器"></a>何时使用触发器</h2><p>当我们想要在一个表记录被更新时做一些操作时就可以说使用触发器，但是完全可以在 python 中来完成这个事情。</p>
+<h2 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create trigger t_name t_time t_event on table_name for each row</span><br><span class="line">begin</span><br><span class="line">stmts...</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>支持的时间点（t_time）：事件发生之前和之后 before|after</p>
+<p>支持的事件（t_event）：update、insert、delete</p>
+<p>在触发器中可以访问到将被修改的那一行数据，根据事件不同能访问的也不同，update 可用 old 访问旧数据，new访问新数据，insert 可用 new 访问新数据，delete 可用 old 访问旧数据。</p>
+<p>可以将 new 和 old 看做一个对象，其中封装了修改的数据的所有字段。</p>
+<h2 id="使用触发器"><a href="#使用触发器" class="headerlink" title="使用触发器"></a>使用触发器</h2><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>有 cmd 表和错误日志表，需求：在 cmd 执行失败时自动将信息存储到错误日志表中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># 准备数据</span><br><span class="line">mysql&gt; create table cmd(</span><br><span class="line">	   id int primary key auto_increment,</span><br><span class="line">       user char(32),</span><br><span class="line">       priv char(10),</span><br><span class="line">       cmd char(64),</span><br><span class="line">       sub_time datetime, # 提交时间</span><br><span class="line">       success enum(&#x27;yes&#x27;,&#x27;no&#x27;)); # 0代表执行失败</span><br><span class="line"># 错误日志表</span><br><span class="line">mysql&gt; create table errlog(</span><br><span class="line">	   id int primary key auto_increment,</span><br><span class="line">	   err_cmd char(64),</span><br><span class="line">	   err_time datetime);</span><br><span class="line"># 创建触发器</span><br><span class="line">mysql&gt; delimiter //</span><br><span class="line">mysql&gt; create trigger trigger1 after insert on cmd for each row</span><br><span class="line">begin</span><br><span class="line">if new.success = &#x27;no&#x27; then</span><br><span class="line">	insert into errlog values(null,new.cmd,new.sub_time);</span><br><span class="line">end if;</span><br><span class="line">end //</span><br><span class="line">delimiter;</span><br><span class="line"># 往表 cmd 中插入记录，触发触发器，根据 if 条件决定是否需要插入错误日志</span><br><span class="line">mysql&gt; insert into cmd(</span><br><span class="line">	   user,</span><br><span class="line">       priv,</span><br><span class="line">       cmd,</span><br><span class="line">       sub_time,</span><br><span class="line">       success</span><br><span class="line">) values</span><br><span class="line">	   (&#x27;thales&#x27;,&#x27;0755&#x27;,&#x27;ls-l /etc&#x27;,now(),&#x27;yes&#x27;),</span><br><span class="line">	   (&#x27;thales&#x27;,&#x27;0755&#x27;,&#x27;cat /etc/password&#x27;,now(),&#x27;no&#x27;),</span><br><span class="line">	   (&#x27;thales&#x27;,&#x27;0755&#x27;,&#x27;user ass xxx&#x27;,now(),&#x27;no&#x27;),</span><br><span class="line">	   (&#x27;thales&#x27;,&#x27;0755&#x27;,&#x27;ps aux&#x27;,now(),&#x27;yes&#x27;);</span><br><span class="line"># 查看错误日志表中的记录是否有自动插入</span><br><span class="line">mysql&gt; select * from errlog;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>delimiter</code>用于修改默认的行结束符，由于在触发器中有多条 sql 语句需要使用分号来结束，但是触发器是一个整体，所以需要先更换默认的结束符（这里修改的只是客户端的结束符，服务端还是以分号结束），在触发器编写完后再讲结束符设置回分号</strong></p>
+<p><strong>注意：外键不能触发事件，主表删除了某个主键，从表也会相应的删除数据，但是并不会执行触发器，并且触发器中不能使用事务，相同时间点的相同事件的触发器，不能同时存在。</strong></p>
+<h2 id="删除触发器"><a href="#删除触发器" class="headerlink" title="删除触发器"></a>删除触发器</h2><h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; drop trigger trigger_name;</span><br><span class="line"># 删除上面创建的触发器</span><br><span class="line">mysql&gt; drop trigger trigger1;</span><br></pre></td></tr></table></figure>
+
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="什么是事务？"><a href="#什么是事务？" class="headerlink" title="什么是事务？"></a>什么是事务？</h2><p>mysql 事务主要用于处理操作量大，复杂度高的数据。比如说，在人员管理系统中，你删除一个人员，你即需要删除人员的基本资料，也需要删除和该人员相关的信息，如信箱、文章等，这样，这些数据库操作就构成一个事务。事务是逻辑上的一组操作，要么都成功，要么都失败。</p>
+<ul>
+<li>在 mysql 中只有使用了 InnoDB 数据库引擎的数据库或表才支持事务；</li>
+<li>事务处理可以用来维护数据库的完整性，保证成批的 sql 语句要么都执行，要么都不执行；</li>
+<li>事务用来管理 insert、update、delete语句</li>
+</ul>
+<h2 id="事务的四个特性"><a href="#事务的四个特性" class="headerlink" title="事务的四个特性"></a>事务的四个特性</h2><p>一般来说，事务必须满足四个条件（ACID）：原子性（Atomicity，或称不可分割性）、一致性（Consistency）、隔离性（Isolation，又称独立性）、持久性（Durability）。</p>
+<ul>
+<li><strong>原子性：</strong>一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节，事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样；</li>
+<li><strong>一致性：</strong>在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性的完成预定的工作；</li>
+<li><strong>隔离性：</strong>数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（Read committed）、可重复读（Repeatable read）和串行化（Serializable）。</li>
+<li><strong>持久性：</strong>事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
+</ul>
+<p><strong>在 mysql 命令行的默认设置下，事务都是自动提交的，即执行 sql 语句后就会马上执行 commit 操作。因此要显式的开启一个事务必须使用命令 begin 或 start transaction，或者执行命令 set autocommit&#x3D;0，用来禁止使用当前会话的自动提交。</strong></p>
+<h2 id="事务控制语句"><a href="#事务控制语句" class="headerlink" title="事务控制语句"></a>事务控制语句</h2><ul>
+<li>begin 或 start transaction：显式的开启一个事务；</li>
+<li>commit：也可以使用 commit work，不过二者是等价的。commit 会提交事务，并使已对数据库进行的所有修改成为永久性的；</li>
+<li>rollback：也可以使用 rollback work，二者也是等价的。回滚会结束用户的事务，并撤销正在进行的所有未提交的修改；</li>
+<li>savepoint identifier：savepoint 允许在事务中创建一个保存点，一个事务中可以有多个 savepoint；</li>
+<li>release savepoint identifier：删除一个事务的保存点，当没有指定的保存点时，执行该语句会抛出一个异常；</li>
+<li>rollback to identifier：把事务回滚到标记点；</li>
+<li>set transaction：用来设置事务的隔离级别。InnoDB 存储引擎提供事务的隔离级别有 read uncommitted、read committed、repeatable read和 serializable。</li>
+</ul>
+<h2 id="mysql-事务处理的两种方式"><a href="#mysql-事务处理的两种方式" class="headerlink" title="mysql 事务处理的两种方式"></a>mysql 事务处理的两种方式</h2><ol>
+<li>BEGIN，ROLLBACK，COMMIT 来实现</li>
+</ol>
+<ul>
+<li><strong>BEGIN：</strong>开始一个事务</li>
+<li><strong>ROLLBACK：</strong>事务回滚</li>
+<li><strong>COMMIT：</strong>事务确认</li>
+</ul>
+<ol start="2">
+<li>直接使用 set 来改变 mysql 的自动提交模式</li>
+</ol>
+<ul>
+<li><strong>SET AUTOCOMMIT&#x3D;0：</strong>禁止自动提交</li>
+<li><strong>SET AUTOCOMMIT&#x3D;1：</strong>开启自动提交</li>
+</ul>
+<h2 id="事务的用户隔离级别"><a href="#事务的用户隔离级别" class="headerlink" title="事务的用户隔离级别"></a>事务的用户隔离级别</h2><p>数据库使用者可以控制数据库工作在哪个级别下，就可以防止不同的隔离性问题。</p>
+<ul>
+<li>read uncommitted：不做任何隔离，可能脏读、幻读；</li>
+<li>read committed：可以防止脏读，不能防止不可重复读和幻读；</li>
+<li>repeatable read：可以防止脏读，不可重复读，不能防止幻读；</li>
+<li>serializable：数据库运行在串行化实现，所有问题都没有，就是性能低。</li>
+</ul>
+<h2 id="修改隔离级别"><a href="#修改隔离级别" class="headerlink" title="修改隔离级别"></a>修改隔离级别</h2><h3 id="查询当前级别"><a href="#查询当前级别" class="headerlink" title="查询当前级别"></a>查询当前级别</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@tx_isolation;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改级别"><a href="#修改级别" class="headerlink" title="修改级别"></a>修改级别</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set global transaction isolation level Repeatable read;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用事务"><a href="#使用事务" class="headerlink" title="使用事务"></a>使用事务</h2><p><strong>start transaction：</strong>开启事务，在这条语句之后的 sql 将处在同一事务，不会立即修改数据库</p>
+<p><strong>commit：</strong>提交事务，让这个事务中的 sql 立即执行数据的操作</p>
+<p><strong>rollback：</strong>回滚事务，取消这个事务，这个事务不会对数据库中的数据产生任何影响。</p>
+<h3 id="案例：转账过程中发生异常"><a href="#案例：转账过程中发生异常" class="headerlink" title="案例：转账过程中发生异常"></a>案例：转账过程中发生异常</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 准备数据</span><br><span class="line">mysql&gt; create table account(</span><br><span class="line">	   id int primary key auto_increment,</span><br><span class="line">	   name varchar(20),</span><br><span class="line">	   money double);</span><br><span class="line">insert into account values(1,&#x27;赵大儿子&#x27;,1000);</span><br><span class="line">insert into account values(2,&#x27;刘大牛&#x27;,1000);</span><br><span class="line">insert into account values(3,&#x27;猪头三&#x27;,1000);</span><br><span class="line">insert into account values(4,&#x27;王进&#x27;,1000);</span><br><span class="line">insert into account values(5,&#x27;黄卉&#x27;,1000);</span><br><span class="line"></span><br><span class="line"># 赵大儿子刘大牛佳转账1000块</span><br><span class="line"># 未使用事务</span><br><span class="line">update account set money = money - 1000 where id = 1;</span><br><span class="line">update account set moneys = money - 1000 where id = 1; # money打错了导致执行失败</span><br><span class="line"></span><br><span class="line"># 在python中使用事务处理</span><br><span class="line">sql = &#x27;update account set money = money - 1000 where id = 1;&#x27;</span><br><span class="line">sql2 = &#x27;update account set moneys = money + 1000 where id = 2;&#x27; # money打错了导致执行失败</span><br><span class="line">try:</span><br><span class="line">    cursor.execute(sql)</span><br><span class="line">    cursor.execute(sql2)</span><br><span class="line">    conn.commit()</span><br><span class="line">except:</span><br><span class="line">    conn.rollback()</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：事务的回滚的前提是能捕捉到异常，否则无法决定何时回滚，python 中很简单就可以实现，另外 mysql 中需要使用存储过程才可以捕获异常。</strong></p>
+<h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h1><h3 id="什么是存储过程？"><a href="#什么是存储过程？" class="headerlink" title="什么是存储过程？"></a>什么是存储过程？</h3><p>存储过程是一组任意的 sql 语句集合，存储在 mysql 中，调用存储过程时将会执行其包含的所有 sql 语句，与 python 中的函数类似。</p>
+<h3 id="为什么使用存储过程？"><a href="#为什么使用存储过程？" class="headerlink" title="为什么使用存储过程？"></a>为什么使用存储过程？</h3><p>回顾触发器与视图其实都是为了简化应用程序中 sql 语句的书写，但是还是需要编写，而存储过程中可以包含任何的 sql 语句，包括视图、事务、控制流程等，这样一来，用用程序可以从 sql 语句中完全解放出来，mysql 可以替代应用程序完成数据相关的逻辑处理。</p>
+<h3 id="三种开发方式对比"><a href="#三种开发方式对比" class="headerlink" title="三种开发方式对比"></a>三种开发方式对比</h3><ol>
+<li><p>应用程序仅负责业务逻辑编写，所有与数据相关的逻辑都交给 mysql 来完成，通过存储过程（推荐使用）</p>
+<p>优点：应用程序与数据处理完全解耦合，一对复杂的 sql 被封装成了一个简单的存储过程，考虑到网络环境因素，效率高，应用程序开发者不需要编写 sql 语句，开发效率高。</p>
+<p>缺点：python 语法与 mysql 语法区别巨大，学习成本高，并且各种数据库的语法大不相同，所以移植性非常差，应用程序开发者与 DBA 的跨部门沟通成本高，造成整体效率低。</p>
+</li>
+<li><p>应用程序不仅编写业务逻辑，还需要编写所有的 sql 语句</p>
+<p>优点：扩展性高，对于应用程序开发者而言，扩展性和维护性相较于第一种都有所提高。</p>
+<p>缺点：执行效率低，由于需要将对象的操作转化为 sql 语句，且需要通过网络发送大量的 sql 语句。</p>
+</li>
+</ol>
+<h2 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h2><h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create procedure pro_name(p_type p_name data_type)</span><br><span class="line">begin</span><br><span class="line">sql 语句......流程控制</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p><strong>p_type：</strong>参数类型</p>
+<p><strong>in：</strong>表示输入参数</p>
+<p><strong>out：</strong>表示输出参数</p>
+<p><strong>inout：</strong>表示既能输入又能输出</p>
+<p><strong>p_name：</strong>参数名称</p>
+<p><strong>data_type：</strong>参数类型 mysql 支持的所有数据类型</p>
+<h3 id="案例：使用存储过程完成对-student-表的查询"><a href="#案例：使用存储过程完成对-student-表的查询" class="headerlink" title="案例：使用存储过程完成对 student 表的查询"></a>案例：使用存储过程完成对 student 表的查询</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">delimiter //</span><br><span class="line">create procedure p1(in m int,in n int,out res int)</span><br><span class="line">begin</span><br><span class="line">    select *from student where chinese &gt; m and chinese &lt; n;</span><br><span class="line">    #select *from student where chineseXXX &gt; m and chinese &lt; n; 修改错误的列名以测试执行失败</span><br><span class="line">    set res = 100;</span><br><span class="line">end//</span><br><span class="line">delimiter ;</span><br><span class="line">set @res = 0;</span><br><span class="line">#调用存储过程</span><br><span class="line">call p1(70,80,@res);</span><br><span class="line">#查看执行结果</span><br><span class="line">select @res;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：存储过程的 out 类参数必须是一个变量，用来装输出数据的，不可是一个值</strong></p>
+<h3 id="python-中调用存储过程"><a href="#python-中调用存储过程" class="headerlink" title="python 中调用存储过程"></a>python 中调用存储过程</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>  pymysql</span><br><span class="line"><span class="comment">#建立连接</span></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">    host=<span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">    user=<span class="string">&quot;root&quot;</span>,</span><br><span class="line">    password=<span class="string">&quot;admin&quot;</span>,</span><br><span class="line">    database=<span class="string">&quot;db02&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 获取游标</span></span><br><span class="line">cursor = conn.cursor(pymysql.cursors.DictCursor)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用用存储过程</span></span><br><span class="line">cursor.callproc(<span class="string">&quot;p1&quot;</span>,(<span class="number">70</span>,<span class="number">80</span>,<span class="number">0</span>)) <span class="comment">#p1为存储过程名 会自动为为每个值设置变量,名称为 @_p1_0,@_p1_1,@_p1_2</span></span><br><span class="line"><span class="comment"># 提取执行结果是否有结果取决于存储过程中的sql语句</span></span><br><span class="line"><span class="built_in">print</span>(cursor.fetchall())</span><br><span class="line"><span class="comment"># 获取执行状态</span></span><br><span class="line">cursor.execute(<span class="string">&quot;select @_p1_2&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(cursor.fetchone())</span><br></pre></td></tr></table></figure>
+
+<p>此处 pymysql 会自动将参数都设置一个变量所以可以直接传入一个值，当然值如果作为输出参数的话，传入什么都可以。</p>
+<h3 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop procedure 过程名;</span><br></pre></td></tr></table></figure>
+
+<p>修改存储过程的意义不大，不如删除重写。</p>
+<h3 id="查看存储过程"><a href="#查看存储过程" class="headerlink" title="查看存储过程"></a>查看存储过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 当前库所有存储过程名称</span><br><span class="line">mysql&gt; select &#x27;name&#x27; from mysql.proc where db = &#x27;db02&#x27; and &#x27;type&#x27; = 	 &#x27;procedure&#x27;;</span><br><span class="line"># 查看创建语句</span><br><span class="line">mysql&gt; show create procedure p1;</span><br></pre></td></tr></table></figure>
+
+<h3 id="存储过程中的事务应用"><a href="#存储过程中的事务应用" class="headerlink" title="存储过程中的事务应用"></a>存储过程中的事务应用</h3><p>存储过程中支持任何的 sql 语句也包括事务。</p>
+<h4 id="案例：模拟转账中发送异常，进行回滚操作"><a href="#案例：模拟转账中发送异常，进行回滚操作" class="headerlink" title="案例：模拟转账中发送异常，进行回滚操作"></a>案例：模拟转账中发送异常，进行回滚操作</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">delimiter //</span><br><span class="line">create PROCEDURE p5(</span><br><span class="line">    OUT p_return_code tinyint</span><br><span class="line">)</span><br><span class="line">BEGIN </span><br><span class="line">    DECLARE exit handler <span class="keyword">for</span> sqlexception </span><br><span class="line">    BEGIN </span><br><span class="line">        -- ERROR </span><br><span class="line">        <span class="built_in">set</span> p_return_code = <span class="number">1</span>; </span><br><span class="line">        rollback; </span><br><span class="line">    END; </span><br><span class="line">    <span class="comment"># exit 也可以换成continue 表示发送异常时继续执行</span></span><br><span class="line">    DECLARE exit handler <span class="keyword">for</span> sqlwarning </span><br><span class="line">    BEGIN </span><br><span class="line">        -- WARNING </span><br><span class="line">        <span class="built_in">set</span> p_return_code = <span class="number">2</span>; </span><br><span class="line">        rollback; </span><br><span class="line">    END; </span><br><span class="line"></span><br><span class="line">    START TRANSACTION; </span><br><span class="line">    update account <span class="built_in">set</span> money = money - <span class="number">1000</span> where <span class="built_in">id</span> = <span class="number">1</span>;</span><br><span class="line">    update account <span class="built_in">set</span> moneys = money - <span class="number">1000</span> where <span class="built_in">id</span> = <span class="number">1</span>; <span class="comment"># moneys字段导致异常</span></span><br><span class="line">    COMMIT; </span><br><span class="line"></span><br><span class="line">    -- SUCCESS </span><br><span class="line">    <span class="built_in">set</span> p_return_code = <span class="number">0</span>; <span class="comment">#0代表执行成功</span></span><br><span class="line"></span><br><span class="line">END //</span><br><span class="line">delimiter ;</span><br><span class="line"></span><br><span class="line"><span class="comment">#在mysql中调用存储过程</span></span><br><span class="line"><span class="built_in">set</span> @res=<span class="number">123</span>;</span><br><span class="line">call p5(@res);</span><br><span class="line">select @res;</span><br></pre></td></tr></table></figure>
+
+<p><strong>总结：</strong>抛开沟通成本、学习成本，存储过程无疑是效率最高的处理方式。</p>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><p>在SQL 语句中，表达式可用于一些诸如SELECT语句的ORDER BY 或 DELETE或 UPDATE语句的 WHERE 子句或 SET语句之类的地方。使用文本值、column值、NULL值、函数、 操作符来书 写 表达式。 本章叙述了可用于书写MySQL表达式的函数和操作符。 </p>
+<p>这些内置函数大大提高了我们的开发效率</p>
+<h4 id="字符相关函数"><a href="#字符相关函数" class="headerlink" title="字符相关函数"></a>字符相关函数</h4><p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxlp2yzzg3j312c0lqdkz.jpg" alt="image-20181126193527077"></p>
+<h4 id="数学相关函数"><a href="#数学相关函数" class="headerlink" title="数学相关函数"></a>数学相关函数</h4><p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fxlp2vch0zj312c0lqdkz.jpg" alt="image-20181126193551302"></p>
+<h4 id="日期相关函数"><a href="#日期相关函数" class="headerlink" title="日期相关函数"></a>日期相关函数</h4><p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fxlp3mjeg7j312s0m0n0l.jpg"></p>
+<h4 id="其他函数"><a href="#其他函数" class="headerlink" title="其他函数"></a>其他函数</h4><p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fxlp5hdpcoj312c0gmgok.jpg"></p>
+<h3 id="自定义函数"><a href="#自定义函数" class="headerlink" title="自定义函数"></a>自定义函数</h3><h4 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create function f_name(paramters)</span><br><span class="line">return dataType</span><br><span class="line">return value;</span><br></pre></td></tr></table></figure>
+
+<p>说明：paramters 只能是 in 输入参数、参数名、类型必须有返回值，不能加 begin 和 end，returns 后面是返回值的类型，这里不加分号，return 后面是要返回的值。</p>
+<h4 id="案例：将两数相加"><a href="#案例：将两数相加" class="headerlink" title="案例：将两数相加"></a>案例：将两数相加</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create function addfuntion(a int,b int)</span><br><span class="line">returns int return a + b;</span><br><span class="line"># 执行函数</span><br><span class="line">mysql&gt; select addfuntion(1,1);</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：函数只能返回一个值，函数一般不涉及数据的增删查改，就是一个通用的功能，调用自定义的函数与调用系统的一直，不需要 call 使用 select 可获得返回值，函数中不能使用 sql 语句，就像在 java 中不能识别 sql 语句一样（没学过java。。。）</strong></p>
+<h1 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h1><h3 id="使用-mysqldump-程序进行备份"><a href="#使用-mysqldump-程序进行备份" class="headerlink" title="使用 mysqldump 程序进行备份"></a>使用 mysqldump 程序进行备份</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -u -p db_name [table_name,,,] &gt; fileName.sql</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：这是命令行命令</strong></p>
+<p>可以选则要备份那些表，如果不指定代表全部备份</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 示例</span><br><span class="line"># 单库备份</span><br><span class="line">mysqldump -uroot -p123 db1 &gt; db1.sql</span><br><span class="line">mysqldump -uroot -p123 db1 table table2 &gt; db1-table1-table2.sql</span><br><span class="line"></span><br><span class="line"># 多库备份</span><br><span class="line">mysqldump -uroot -p123 --databases db1 db2 mysql db3 &gt; db1_db2_mysql_db3.sql</span><br><span class="line"></span><br><span class="line"># 备份所有</span><br><span class="line">mysqldump -uroot -p123 --all-databases &gt; all.sql</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-mysql-进行恢复"><a href="#使用-mysql-进行恢复" class="headerlink" title="使用 mysql 进行恢复"></a>使用 mysql 进行恢复</h3><ol>
+<li>退出数据库后</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u -p &lt; filenam.sql</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>不用退出数据库<ol>
+<li>创建空数据库</li>
+<li>选择数据库</li>
+<li>然后使用 source filename 来进行还原</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use db1;</span><br><span class="line">mysql&gt; source /root/db1.sql</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据库迁移"><a href="#数据库迁移" class="headerlink" title="数据库迁移"></a>数据库迁移</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 务必保证在相同版本之间迁移</span><br><span class="line">mysqldump -h 源ip -uroot -p123 --databases db1 | mysql -h 目标ip -uroot -p456</span><br></pre></td></tr></table></figure>
+
+<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="if-语句"><a href="#if-语句" class="headerlink" title="if 语句"></a>if 语句</h2><p>if 条件 then 语句;end if;第二种 if else if 条件 then 语句1;else if 条件</p>
+<p>then 语句2;else 语句3;end if;</p>
+<h3 id="案例：编写过程实现-输入一个整数-type-范围1-2-输出-type-x3D-1-or-type-x3D-other"><a href="#案例：编写过程实现-输入一个整数-type-范围1-2-输出-type-x3D-1-or-type-x3D-other" class="headerlink" title="案例：编写过程实现 输入一个整数 type 范围1-2 输出 type&#x3D;1 or type&#x3D;other;"></a>案例：编写过程实现 输入一个整数 type 范围1-2 输出 type&#x3D;1 or type&#x3D;other;</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create procedure showType(in type int,out result char(20))</span><br><span class="line">begin</span><br><span class="line">if type = 1 then </span><br><span class="line">set result = &quot;type = 1&quot;;</span><br><span class="line">elseif type = 2 then </span><br><span class="line">set result = &quot;type = 2&quot;;</span><br><span class="line">else </span><br><span class="line">set result = &quot;type = other&quot;;</span><br><span class="line">end if;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="case-语句"><a href="#case-语句" class="headerlink" title="case 语句"></a>case 语句</h2><p>与 switch 一样，进行选择执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create procedure caseTest(in type int)</span><br><span class="line">begin</span><br><span class="line">CASE type </span><br><span class="line">when 1  then select &quot;type = 1&quot;;</span><br><span class="line">when 2  then select &quot;type = 2&quot;;</span><br><span class="line">else select &quot;type = other&quot;;</span><br><span class="line">end case;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; declare 变量名 类型 default 值;</span><br><span class="line">mysql&gt; declare i int default 0;</span><br></pre></td></tr></table></figure>
+
+<h2 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 循环输出10次 hello mysql</span><br><span class="line">mysql&gt; create procedure showHello()</span><br><span class="line">begin</span><br><span class="line">declare i int default 0;</span><br><span class="line">while i &lt; 10 do</span><br><span class="line">select &#x27;hello mysql&#x27;;</span><br><span class="line">end while;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="loop-循环"><a href="#loop-循环" class="headerlink" title="loop 循环"></a>loop 循环</h2><p>没有条件，需要自己定义结束语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 输出10次 hello mysql</span><br><span class="line">mysql&gt; create procedure showLoop()</span><br><span class="line">begin</span><br><span class="line">declare i int default 0;</span><br><span class="line">aloop:loop</span><br><span class="line">select &#x27;hello loop&#x27;;</span><br><span class="line">set i &gt; 9 then leave aloop;</span><br><span class="line">end if;</span><br><span class="line">end loop aloop;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="repeat-循环"><a href="#repeat-循环" class="headerlink" title="repeat 循环"></a>repeat 循环</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 类似do while</span><br><span class="line"># 输出10次hello repeat</span><br><span class="line">mysql&gt; create procedure showRepeat()</span><br><span class="line">begin</span><br><span class="line">declare i int default 0;</span><br><span class="line">repeat</span><br><span class="line">select &quot;hello repeat&quot;;</span><br><span class="line">set i = i + 1;</span><br><span class="line">until i &gt; 9</span><br><span class="line">end repeat;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line"># 输出0-100之间的奇数</span><br><span class="line">mysql&gt; create procedure showjishu()</span><br><span class="line">begin</span><br><span class="line">declare i int default 0;</span><br><span class="line">aloop: loop</span><br><span class="line">set i = i + 1;</span><br><span class="line">if i &gt;= 101 then leave aloop; end if;</span><br><span class="line">if i % 2 = 0 then iterate aloop; end if;</span><br><span class="line">select i;</span><br><span class="line">end loop aloop;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">vilc</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://rsuxwvilc.github.io/2018/11/26/%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E4%B8%83%EF%BC%89/">https://rsuxwvilc.github.io/2018/11/26/%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E4%B8%83%EF%BC%89/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">vilc</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2018/11/27/%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E5%85%AB%EF%BC%89/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="数据库（八）">
+                        
+                        <span class="card-title">数据库（八）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-11-27
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                    数据库
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/11/24/%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E5%85%AD%EF%BC%89/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="数据库（六）">
+                        
+                        <span class="card-title">数据库（六）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                    数据库
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">vilc</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

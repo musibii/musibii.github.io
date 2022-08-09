@@ -1,37 +1,1182 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="网络编程（二）, rsuxwvilc">
+    <meta name="description" content="六 网络编程(一)总结首先对网络编程(一)做个总结:我们现在知道互联网通信其实就是发送数据包与接收数据包.电脑 A 向电脑 B 发送一个数据包, B 收到然后回复一个数据包,才实现了电脑之间的通信.数据包的结构,基本是下图的形式:
 
-{% block page_class %}page-post-detail{% endblock %}
+想要发">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-{% block content %}
+    <title>网络编程（二） | rsuxwvilc</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">rsuxwvilc</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">rsuxwvilc</div>
+        <div class="logo-desc">
+            
+            Linux Python Vim Git
+            
+        </div>
     </div>
-  </div>
 
-{% endblock %}
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">网络编程（二）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
+                                网络编程
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-11-06
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="六-网络编程-一-总结"><a href="#六-网络编程-一-总结" class="headerlink" title="六 网络编程(一)总结"></a>六 网络编程(一)总结</h3><p>首先对网络编程(一)做个总结:我们现在知道互联网通信其实就是发送数据包与接收数据包.电脑 A 向电脑 B 发送一个数据包, B 收到然后回复一个数据包,才实现了电脑之间的通信.数据包的结构,基本是下图的形式:</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwzphjwjz9j30kp072mxv.jpg"></p>
+<p>想要发送这个数据包需要知道两个地址:</p>
+<ol>
+<li>对方的 MAC 地址</li>
+<li>对方的 IP 地址</li>
+</ol>
+<p>只有发送方知道这两个地址,数据包才可以准确的发送到接收方.之前已经了解,单纯的 MAC 地址是有局限性的,就是只能在一个局域网内通过MAC 地址通信,如果两台计算机不在一个局域网,那么只能发送给网关( gateway),由网关走路由协议发送给对方.</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwzpl181evj30m80c8ab3.jpg"></p>
+<p>上图中,1号狄电脑想要个4号电脑通信.首先需要知道对方电脑的 IP 和子网掩码,然后通过 ARP 协议计算出自己和对方的网络号,然后判断是否处于同一个局域网,不是的话,1号电脑将数据包发给网关 A. 网关 A 通过路由协议,发现4号电脑位于网络 B, 又把数据包发给网关 B, 网关 B 再转发给4号电脑.</p>
+<p>1号电脑想要把数据包发给网关 A, 首先必须知道网关 A 的 MAC 地址.所以,数据包的目标地址,实际上分为两种情况:</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="center">数据报地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同一个局域网</td>
+<td align="center">对方的 MAC 地址,对方的 IP 地址</td>
+</tr>
+<tr>
+<td>非同一个局域网</td>
+<td align="center">网关的 MAC 地址,对方的 IP 地址</td>
+</tr>
+</tbody></table>
+<p>发送数据包之前,电脑必须判断对方与自己是否处于同一个局域网,然后选择相应的处理方式来发送数据包.</p>
+<h2 id="四-首次联网相关设置"><a href="#四-首次联网相关设置" class="headerlink" title="四 首次联网相关设置"></a>四 首次联网相关设置</h2><h3 id="一-静态IP-设置"><a href="#一-静态IP-设置" class="headerlink" title="一 静态IP 设置"></a>一 静态IP 设置</h3><p>当我们购买了一台新电脑时,插上网线,开机,这时候电脑能够上网吗?说到这想到我大二干的一件蠢事,那时候不知道路由器的工作原理,以为买了路由器就可以连无线网上网了,然后兴冲冲在网上买了一个路由器,收到货之后插上电,插上网线,发现 WiFi 倒是出现了,可是连上却没有反应,然后我就想啊,不对啊怎么连不上网?之后我想明白了,我 TM 的根本就没装宽带,哪来的网.好在那个路由器也没闲着,终于在去年服役了…</p>
+<p>当购买的新电脑连上网线时,通常需要做一些设置,一般现在都会自动设置 IP, 子网掩码 DNS 服务器啦,但是也有有手动设置的,一般会设置四个参数:</p>
+<ul>
+<li>本机 IP 地址</li>
+<li>子网掩码</li>
+<li>网关 IP 地址</li>
+<li>DNS IP 地址</li>
+</ul>
+<p>看看 linux 系统的设置</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwzqfzl3eaj30w40toq5k.jpg"></p>
+<p>这四个参数缺一不可,由于这是给定的,计算机每次开机都会分到同样的 IP 地址,所以这种情况称为静态 IP 地址上网.</p>
+<p>但是这样的设置比较专业,而且不够灵活.所以大多数用户使用动态 IP 地址上网.</p>
+<h3 id="二-动态-IP-地址上网"><a href="#二-动态-IP-地址上网" class="headerlink" title="二 动态 IP 地址上网"></a>二 动态 IP 地址上网</h3><p>所谓动态 IP 地址,值得是计算机开机后,会由服务器自动分配一个 IP 地址,不需要人为设置.使用的协议为 <strong>动态主机设置协议</strong>(<strong>Dynamic Host Configuration Protocol，DHCP</strong>) 协议,是一个局域网的网络协议,使用 UDP协议工作,主要有两个用途:</p>
+<ol>
+<li>用于内部网或网络服务供应商自动分配 IP 地址给用户;</li>
+<li>用于内部网管理员作为对所有计算机作中央管理的手段.</li>
+</ol>
+<p>这个协议规定,每一个局域网中,有一台计算机负责管理本网络的所有 IP 地址,它叫做<strong>DHCP 服务器</strong>.新的计算机加入网络,首先必须向 DHCP 服务器发送一个 DHCP 请求数据包,申请 IP 地址和相关的网络参数.</p>
+<p>前面说过,如果两台计算机在同一个局域网,必须知道对方的 MAC 地址和 IP 地址,才能发送数据包.但是新加入的计算机并不知道这两个地址,怎么发送数据包呢?这就是 DHCP 的功劳了.</p>
+<h3 id="三-DHCP-协议"><a href="#三-DHCP-协议" class="headerlink" title="三 DHCP 协议"></a>三 DHCP 协议</h3><p>首先, DHCP 是应用层协议,建立在 UDP 之上的,数据包是这样的:</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwzqwo48aqj30m807k0th.jpg"></p>
+<ol>
+<li>最前面的以太网标头,设置发送方(本机)的 MAC 地址和接收方( DHCP)的 MAC 地址.前着就是本机网卡的 MAC 地址,后者这时候并不知道,就填入一个广播地址:FF-FF-FF-FF-FF-FF.这个地址是具有特殊意义的MAC 地址.</li>
+<li>后面的 IP 标头,设置发送方的 IP 地址和接收方的 IP地址.这时候,对于这两者,本机都不知道.于是发送方的 IP 地址就设为0.0.0.0,接收方得 IP 地址设为255.255.255.255.</li>
+<li>最后的 UDP 标头,设置发送方的端口和接收方的端口.这一部分是 DHCP 协议规定好的,发送方为68端口,接收方为67端口.</li>
+</ol>
+<p>数据包内容构造完成后,就可以发包了.以太网是基于广播方式发送的,同一个局域网的每个计算机都会收到这个数据包.因为接收方的 MAC 地址是FF-FF-FF-FF-FF-FF,看不出是发给谁的,所以每台计算机收到数据包后都会进行拆包才能确定是不是发给自己的.当看到发送方 IP 地址为0.0.0.0,接收方是255.255.255.255时, DHCP 服务器知道,哦,原来这个包是发给我的,所以其他的计算机就可以丢弃这个包了.</p>
+<p>于是 DHCP 服务器读取数据包内容,分配好 IP 地址,发送一个 DHCP 响应数据包.这个是数据包的结构和上面是类似的,以太网标头的 MAC 地址是双方的网卡地址, IP 标头的 IP 地址是 DHCP 副武器的 IP 地址(发送方)和255.255.255.255(接收方),UDP 标头的端口是67(发送方)和68(接收方),分配给请求端的 IP 地址和本网络的具体参数则包含在 Data 部分.</p>
+<p>新加入的计算机收到这个响应包,于是就知道了自己的 IP 地址,子网掩码,网关地址和DNS 服务器地址.</p>
+<h3 id="四-小结"><a href="#四-小结" class="headerlink" title="四 小结"></a>四 小结</h3><p>这是联网的第一步,不管是静态 IP 地址还是动态 IP 地址,想要连上互联网,需要确定这四个参数:</p>
+<ul>
+<li>本机 IP 地址</li>
+<li>子网掩码</li>
+<li>网关 IP 地址</li>
+<li>DNS IP 地址</li>
+</ul>
+<p>只有这四个参数确定了,才可以愉快的进行网络冲浪.那么当我们访问网页的时候,互联网协议是如何工作的呢?</p>
+<h2 id="五-访问网页"><a href="#五-访问网页" class="headerlink" title="五 访问网页"></a>五 访问网页</h2><h3 id="一-本机参数"><a href="#一-本机参数" class="headerlink" title="一 本机参数"></a>一 本机参数</h3><p>假定经过上一节的步骤,用户设置好了自己的网络参数:</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwzriwaa8vj312q0uodig.jpg"></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwzrj786gfj312q0uo76a.jpg"></p>
+<ul>
+<li>IP 地址:192.168.2.238</li>
+<li>子网掩码:255.255.255.0</li>
+<li>路由器(网关地址):192.168.2.1</li>
+<li>DNS 服务器:192.168.2.1</li>
+</ul>
+<p>打开浏览器访问谷歌,在地址栏输入 <a target="_blank" rel="noopener" href="http://www.google.com,这意味着,浏览器向/">www.google.com,这意味着,浏览器向</a> google 发送一个网页请求的数据包.</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwzrqfes9ej31kw0xrgq8.jpg"></p>
+<h3 id="二-DNS-协议"><a href="#二-DNS-协议" class="headerlink" title="二 DNS 协议"></a>二 DNS 协议</h3><p>我们知道,向谷歌发送一个数据包,必须要知道对方的 IP 地址.但是现在只知道一个网址,并不知道它的 IP 地址.</p>
+<p>DNS 协议可以帮助我们,将这个网址转换成 IP 地址,已经知道我们的 DNX 服务器为192.168.2.1,于是向这个地址发送一个 DNS 数据包(53端口).</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwzrt4ofebj30m807wmxv.jpg"></p>
+<p>然后, DNS 服务器作出相应,告诉我们谷歌的地址是174.36.196.242.于是我们知道了对方的 IP 地址.</p>
+<h3 id="三-子网掩码"><a href="#三-子网掩码" class="headerlink" title="三 子网掩码"></a>三 子网掩码</h3><p>接下来需要判断该 IP地址和本机是否处于同一个局域网,这就需要子网掩码来进行 AND 位运算.</p>
+<p>已知子网掩码是255.255.255.0,本机用子网掩码和自己的 IP地址192.168.2.238,做一个二进制的 AND 运算,计算结果为192.168.2.0,然后对谷歌的 IP 地址也做一个 AND 运算,计算结果为174.36.196.0.两个结果不相等,所以结论是谷歌与本机不在一个局域网.</p>
+<p>因此我们想要和谷歌通信的话需要通过网关转发,网关地址为192.168.2.1,也就是所接收方得 MAC 地址是网关的 MAC 地址.</p>
+<h3 id="四-应用层协议"><a href="#四-应用层协议" class="headerlink" title="四 应用层协议"></a>四 应用层协议</h3><p>浏览网页用的是 HTTP&#x2F;HTTPS 协议,这两种协议的数据构造差不多:</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fwzsa2macaj30ku06rt9e.jpg"></p>
+<p>HTTP部分的内容,类似下面这样:</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwzsd6q0m5j31kw07h0w0.jpg"></p>
+<p>假定这个部分的长度为4960字节,它会被嵌在 TCP 数据包中.</p>
+<h3 id="五-TCP-协议"><a href="#五-TCP-协议" class="headerlink" title="五 TCP 协议"></a>五 TCP 协议</h3><p>TCP 数据包需要设置端口,接收方( Google)的 HTTPS默认是443,发送方(本机)的端口是一个随机生成的1024-65535之间的整数,假定为51775.</p>
+<p>TCP 数据包的标头长度为20字节,加上嵌入 HTTPS 的数据包,总长度为4980字节.</p>
+<h3 id="六-IP-协议"><a href="#六-IP-协议" class="headerlink" title="六 IP 协议"></a>六 IP 协议</h3><p>然后, TCP 数据包再嵌入 IP 数据包.IP 数据包需要设置双方的 IP地址,这是已知的,发送方是192.168.2.238(本机),接收方为174.36.196.242( Google).</p>
+<p>IP 数据包的标头长度为20字节,加上嵌入的 TCP 数据包,总长度变为5000字节.</p>
+<h3 id="七-以太网协议"><a href="#七-以太网协议" class="headerlink" title="七 以太网协议"></a>七 以太网协议</h3><p>最后, IP地址数据包嵌入以太网数据包.以太网数据包需要设置双方的 MAC 地址,发送方为本机的网卡 MAC 地址,接收方为网关192.168.2.1的 MAC 地址(通过 ARP 协议获得)</p>
+<p>本机的 MAC 地址:</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwzsot204kj31by0z4gq0.jpg"></p>
+<p>网关的 MAC 地址:</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fwzspqoyrej312q0uo0um.jpg"></p>
+<p>以太网数据包的数据部分,最大长度为1500字节,而现在的 IP 数据包长度为5000字节.因此, IP 数据包必须分割成四个包.因为每个包都有自己的标头(20字节),所以四个包的 IP 数据包的长度分别为1500,1500,1500,560.</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwzsrk689rj30ku0f83zv.jpg"></p>
+<h3 id="八-服务端响应"><a href="#八-服务端响应" class="headerlink" title="八 服务端响应"></a>八 服务端响应</h3><p>经过多个网关的转发, google 服务器收到了四个以太网数据包.</p>
+<p>根据 IP 标头的序号, google 将四个包拼起来,取出完整的 TCP 数据包,然后读取里面的 HTTPS 请求,接着做出 HTTPS 响应,再用 TCP 协议回复一个数据包.</p>
+<p>本机收到 HTTPS 响应以后,就可以将网页显示出来,完成以一次网络通信.</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">vilc</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://rsuxwvilc.github.io/2018/11/06/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%8C/">https://rsuxwvilc.github.io/2018/11/06/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%BA%8C/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">vilc</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2018/11/07/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%89/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="网络编程（三）">
+                        
+                        <span class="card-title">网络编程（三）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-11-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
+                                    网络编程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/11/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E4%B8%80/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="网络编程（一）">
+                        
+                        <span class="card-title">网络编程（一）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-02
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-category">
+                                    网络编程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">vilc</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
